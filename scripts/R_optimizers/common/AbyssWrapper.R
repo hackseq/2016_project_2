@@ -1,3 +1,4 @@
+library("readr")
 library("testthat")
 
 #' Runs Abyss
@@ -29,11 +30,14 @@ runAbyss<-function(input, name, k) {
                      ),
               silent = TRUE)
 
-    if (inherits(t1, "try-error")) {
+    if (inherits(t1, "try-error") || !is.null(attr(t1,"status"))) {
         print("[FAILED]")
         return()
     }
+
+    stats <- read_csv(paste(outdir, "/", name, "-stats.csv", sep=""))
     print("[DONE]")
+    return(stats)
 }
 
 #' Runs Abyss for the test data
@@ -41,11 +45,12 @@ runAbyss<-function(input, name, k) {
 #' @param k size of a single k-mer in a k-mer pair (bp)
 #' @export
 runAbyssTest <- function(k) {
-    runAbyss("$PWD/data/test-data/reads1.fastq $PWD/data/test-data/reads2.fastq",
+    stats <- runAbyss("$PWD/data/test-data/reads1.fastq $PWD/data/test-data/reads2.fastq",
              "test",
              k)
+    return(stats[[which(stats$name=="test-scaffolds.fa"), "N50"]])
 }
 
-runAbyssTest(k=22)
+runAbyssTest(k=32)
 
 
