@@ -50,3 +50,5 @@ knitr::opts_chunk$set(echo = TRUE)
 	- OPAL  
 	- SpearMint  
 	- R-packages  
+	
+##Readme for parameter optimizer
