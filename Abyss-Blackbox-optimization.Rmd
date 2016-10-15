@@ -15,11 +15,11 @@ knitr::opts_chunk$set(echo = TRUE)
 - BlackBox parameter optimization tools do exist, but their usibility and speed need to be compared & evaluated. 
   - Approaches of optimimation tools:
     - *Exploitation Approach*: Start halfway and try a point to the left and to the right, find next best, iterate
-	  - *Exploration Approach*: Try a bunch of random ranges  
-	  - *Grid Search Approach* 
+    - *Exploration Approach*: Try a bunch of random ranges  
+    - *Grid Search Approach* 
 - Here we evaluate 3 optimization tools - Opal, SpearMint, and ParOpt - on a dataset of a human bacterial artificial chromosome (BAC), using the assembler [ABySS](https://github.com/bcgsc/abyss#readme). 
 
-- We find that: ~blah blah SPEARMINT is real fresh~
+- We find that
 
 #Goals/Methods 
 ##Evaluate 3 parameter optimization tools for usability and speed
@@ -29,7 +29,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - Backend  
 	- What types of input parameters (discrete with large/small ranges, continuous, binary)   
-	- Make it portable to other commandline tools so optimizer can be told how to launch the tool  
+	- Make it portable to other commandline tools so optimizer can be told how to launch the tool
+	
 - Results output  
 	- Generate target metrics vs parameters plot  
 	- Generate Pareto frontier of the target metric and a second metric of interest (contiguity and correctness) likely in R using ggplot   
@@ -40,8 +41,8 @@ knitr::opts_chunk$set(echo = TRUE)
   - Possibly submit for peer review, such as F1000Research Hackathons
 
 ##Dataset(s) and Optimizers
-- Dataset 
-  -  a human bacterial artificial chromosome (BAC), using assembler [ABySS](https://github.com/bcgsc/abyss#readme)
+- Dataset
+  - a human bacterial artificial chromosome (BAC), using assembler [ABySS](https://github.com/bcgsc/abyss#readme)
   
 - Metrics
   - The key metrics are *contiguity* (a.) and *correctness* (b. through d.).
@@ -64,8 +65,8 @@ problems, when the functions are expensive to evaluate
     - a sum of objective specific acquisition functions, which enables the algorithm to be used in decoupled scenarios in which the objectives can be evaluated separately and perhaps with different costs
 	
 	- [ParOpt](https://github.com/sseemayer/ParOpt) by @sseemayer 
-	  -[scipy.optimize](http://docs.scipy.org/doc/scipy/reference/optimize.html)
-	  -[Nelder-Mead](https://en.wikipedia.org/wiki/Nelder%E2%80%93Mead_method)
+	  - [scipy.optimize](http://docs.scipy.org/doc/scipy/reference/optimize.html)
+	  - [Nelder-Mead](https://en.wikipedia.org/wiki/Nelder%E2%80%93Mead_method)
 	  
 	- Possibly R packages, [a long list](https://cran.r-project.org/web/views/Optimization.html)
 	- Possibly Python packages, [like scikit-optimize](https://scikit-optimize.github.io/)
