@@ -56,7 +56,7 @@ knitr::opts_chunk$set(echo = TRUE)
   -  a human bacterial artificial chromosome (BAC), using assembler [ABySS](https://github.com/bcgsc/abyss#readme)
   
 - Metrics
-  - The key metrics are *contiguity* (1) and *correctness* (2 through 4).
+  - The key metrics are *contiguity* (a.) and *correctness* (b. through d.).
     1. contiguity (NG50, N50) and aligned contiguity (NGA50, NA50)
     2. number of breakpoints when aligned to the reference as a proxy for misassemblies
     3. number of mismatched nucleotides when aligned to the reference, Q = -10*log(mismatches / total_aligned)
