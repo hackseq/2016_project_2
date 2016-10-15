@@ -65,9 +65,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - Optimizers being evaluated  
 	- [OPAL](http://pythonoptimizers.github.io/opal/) by @dpo — [Optimization of algorithms with OPAL](http://link.springer.com/article/10.1007/s12532-014-0067-x)
-	  - 
+	  - 'nondifferentiable optimization tools'
+	  - 'runs on most platforms supporting the Python language and possessing a C++ compiler'
+	  - 'an optimization method supported by a strong convergence theory, yielding solutions that are local minimizers in a meaningful sense'
 	- [SpearMint](https://github.com/hips/spearmint) by @mgelbart — [Predictive Entropy Search for Multi-objective Bayesian Optimization](https://arxiv.org/abs/1511.05467)
-	- [ParOpt](https://github.com/sseemayer/ParOpt) by @sseemayer which uses scipy.optimize 
+	- [ParOpt](https://github.com/sseemayer/ParOpt) by @sseemayer 
+	  -[scipy.optimize](http://docs.scipy.org/doc/scipy/reference/optimize.html)
+	  -[Nelder-Mead](https://en.wikipedia.org/wiki/Nelder%E2%80%93Mead_method)
 	- Possibly R packages, [a long list](https://cran.r-project.org/web/views/Optimization.html)
 	- Possibly Python packages, [like scikit-optimize](https://scikit-optimize.github.io/)
 
