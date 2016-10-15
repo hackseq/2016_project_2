@@ -72,6 +72,7 @@ knitr::opts_chunk$set(echo = TRUE)
 	- [ParOpt](https://github.com/sseemayer/ParOpt) by @sseemayer 
 	  -[scipy.optimize](http://docs.scipy.org/doc/scipy/reference/optimize.html)
 	  -[Nelder-Mead](https://en.wikipedia.org/wiki/Nelder%E2%80%93Mead_method)
+	  
 	- Possibly R packages, [a long list](https://cran.r-project.org/web/views/Optimization.html)
 	- Possibly Python packages, [like scikit-optimize](https://scikit-optimize.github.io/)
 
