@@ -1,5 +1,5 @@
 ---
-title: "Abyss Blackbox Optimization"
+title: "ABySS Blackbox Optimization"
 author: "Nivretta Thatra"
 date: "October 15, 2016"
 output: github_document
@@ -20,35 +20,55 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#Project 2 goals  
-## Evaluate a bunch of parameter optimization tools  
-- Response metric   
-- Solution function is unknown  
-	- Know min and max, scale of values (continuous or discrete?)  
-	- Approach 1: Start halfway and try a point to the left and to the right, find next best, *exploitation*  
-	- Approach 2: Try a bunch of random ranges, *exploration*  
-	- Approach 3: Grid search  
-- Current problem evaluation  
-	- Human genome assembly  
-	- Shotgun sequencing to contigs is ~24 hours  
-	- Metric: Contiguity (how long the contigs are) and how accurate the contigs are ( 
-		- We are optimizing for *contiguity*  
-	- For genome assembly, there is one key parameter we can optimize, and then various other weaker ones.  
-- **Paretto Frontier**   
-	- Setting the boundaries for the metrics  
-	
+#Abstract
+- When tackling optimization of parameters, the process is manual and tedious: submitting jobs to a scheduler, rerunning failed jobs, inspecting outputs, tweaking parameters, and repeating. In genome sequence assembly, for example, there are a variety of parameters related to expected coverage of the reads and heuristics to remove read errors and collapse heterozygous variation.
+
+- BlackBox parameter optimization tools do exist, but their usibility and speed need to be compared & evaluated. 
+  - Approaches of optimimation tools:
+    - *Exploitation Approach*: Start halfway and try a point to the left and to the right, find next best, iterate
+	  - *Exploration Approach*: Try a bunch of random ranges  
+	  - *Grid Search Approach* 
+- Here we evaluate 3 optimization tools - Opal, SpearMint, and ParOpt - on a dataset of a human bacterial artificial chromosome (BAC), using the assembler [ABySS](https://github.com/bcgsc/abyss#readme). 
+
+- We find that: ~blah blah SPEARMINT is real fresh~
+
+#Goals/Methods 
+##Evaluate 3 parameter optimization tools for usability and speed
+- Divvy up 3 tools for testing
+- Download ABySS 
+- Access dataset from ORCA computing machine
+
 - Backend  
 	- What types of input parameters (discrete with large/small ranges, continuous, binary)   
 	- Make it portable to other commandline tools so optimizer can be told how to launch the tool  
-	 
 - Results output  
-	- Generate metrics vs parameters plot  
-	- Generate metrics vs metrics plot (Paretto Frontier)   
+	- Generate target metrics vs parameters plot  
+	- Generate Pareto frontier of the target metric and a second metric of interest (contiguity and correctness) likely in R using ggplot   
+	- Generate a report of the results of the optimization
+  - Write a short report of our experience
+  - Post on GitHub pages
+  - Possibly submit to a preprint server (bioRxiv, PeerJ, Figshare)
+  - Possibly submit for peer review, such as F1000Research Hackathons
+
+##Dataset(s) and Optimzers
+- Dataset 
+  -  a human bacterial artificial chromosome (BAC), using assembler [ABySS](https://github.com/bcgsc/abyss#readme)
+  
+- Metrics
+  - The key metrics are *contiguity* (a.) and *correctness* (b. through d.).
+    1. contiguity (NG50, N50) and aligned contiguity (NGA50, NA50)
+    2. number of breakpoints when aligned to the reference as a proxy for misassemblies
+    3. number of mismatched nucleotides when aligned to the reference, Q = -10*log(mismatches / total_aligned)
+    4. completeness, number of reference bases covered by aligned contigs divided by number of reference bases
+  - We'll be optimizing the NG50 metric (or NGA50 with a reference genome) and reporting (but probably not optimizing) the correctness metrics. 
+  - The primary parameter we'll be optimizing is k (a fundamental parameter of nearly all de Bruijn graph assemblers), and there's a bunch other parameters that we can play with (typically thresholds related to expected coverage).
 
 - Optimizers being evaluated  
 	- [OPAL](http://pythonoptimizers.github.io/opal/) by @dpo — [Optimization of algorithms with OPAL](http://link.springer.com/article/10.1007/s12532-014-0067-x)
+	  - 
 	- [SpearMint](https://github.com/hips/spearmint) by @mgelbart — [Predictive Entropy Search for Multi-objective Bayesian Optimization](https://arxiv.org/abs/1511.05467)
 	- [ParOpt](https://github.com/sseemayer/ParOpt) by @sseemayer which uses scipy.optimize 
 	- Possibly R packages, [a long list](https://cran.r-project.org/web/views/Optimization.html)
 	- Possibly Python packages, [like scikit-optimize](https://scikit-optimize.github.io/)
 
+##Results
