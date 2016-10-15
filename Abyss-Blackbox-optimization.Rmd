@@ -1,5 +1,5 @@
 ---
-title: "Abyss Blackbox Optimization"
+title: "ABySS Blackbox Optimization"
 author: "Nivretta Thatra"
 date: "October 15, 2016"
 output: github_document
@@ -20,25 +20,24 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#Project 2 problem statement
-- Human genome assembly  
-- Shotgun sequencing to contigs is ~24 hours  
-- Metric: Contiguity (how long the contigs are) and how accurate the contigs are 
-	- We are optimizing for *contiguity*  
-- For genome assembly, there is one key parameter we can optimize, and then various other weaker ones.  
-- **Paretto Frontier**   
-	- Setting the boundaries for the metrics
-	
-- Response metric   
-- Solution function is unknown  
-	- Know min and max, scale of values (continuous or discrete?)  
-	- *Exploitation Approach*: Start halfway and try a point to the left and to the right, find next best, iterate
-	- *Exploration Approach*: Try a bunch of random ranges  
-	- *Grid Search Approach* 
+#Abstract
+- When tackling optimization of parameters, the process is manual and tedious: submitting jobs to a scheduler, rerunning failed jobs, inspecting outputs, tweaking parameters, and repeating. In genome sequence assembly, for example, there are a variety of parameters related to expected coverage of the reads and heuristics to remove read errors and collapse heterozygous variation.
 
-#Project 2 goals  
-## Evaluate 3 parameter optimization tools for usability and speed
-  
+- BlackBox parameter optimization tools do exist, but their usibility and speed need to be compared & evaluated. 
+  - Approaches of optimimation tools:
+    - *Exploitation Approach*: Start halfway and try a point to the left and to the right, find next best, iterate
+	  - *Exploration Approach*: Try a bunch of random ranges  
+	  - *Grid Search Approach* 
+- Here we evaluate 3 optimization tools - Opal, SpearMint, and ParOpt - on a dataset of a human bacterial artificial chromosome (BAC), using the assembler [ABySS](https://github.com/bcgsc/abyss#readme). 
+
+- We find that: ~blah blah SPEARMINT is real fresh~
+
+#Goals/Methods 
+##Evaluate 3 parameter optimization tools for usability and speed
+- Divvy up 3 tools for testing
+- Download ABySS 
+- Access dataset from ORCA computing machine
+
 - Backend  
 	- What types of input parameters (discrete with large/small ranges, continuous, binary)   
 	- Make it portable to other commandline tools so optimizer can be told how to launch the tool  
@@ -51,12 +50,12 @@ knitr::opts_chunk$set(echo = TRUE)
   - Possibly submit to a preprint server (bioRxiv, PeerJ, Figshare)
   - Possibly submit for peer review, such as F1000Research Hackathons
 
-##Project 2 Dataset(s) and Optimzers
+##Dataset(s) and Optimzers
 - Dataset 
   -  a human bacterial artificial chromosome (BAC), using assembler [ABySS](https://github.com/bcgsc/abyss#readme)
   
 - Metrics
-  - The key metrics are *contiguity* (1) and *correctness* (2 through 4).
+  - The key metrics are *contiguity* (a.) and *correctness* (b. through d.).
     1. contiguity (NG50, N50) and aligned contiguity (NGA50, NA50)
     2. number of breakpoints when aligned to the reference as a proxy for misassemblies
     3. number of mismatched nucleotides when aligned to the reference, Q = -10*log(mismatches / total_aligned)
@@ -72,3 +71,4 @@ knitr::opts_chunk$set(echo = TRUE)
 	- Possibly R packages, [a long list](https://cran.r-project.org/web/views/Optimization.html)
 	- Possibly Python packages, [like scikit-optimize](https://scikit-optimize.github.io/)
 
+##Results
