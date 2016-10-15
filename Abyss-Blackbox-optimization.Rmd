@@ -50,7 +50,7 @@ knitr::opts_chunk$set(echo = TRUE)
   - Possibly submit to a preprint server (bioRxiv, PeerJ, Figshare)
   - Possibly submit for peer review, such as F1000Research Hackathons
 
-##Dataset(s) and Optimzers
+##Dataset(s) and Optimizers
 - Dataset 
   -  a human bacterial artificial chromosome (BAC), using assembler [ABySS](https://github.com/bcgsc/abyss#readme)
   
