@@ -1,5 +1,5 @@
 ---
-title: "Abyss Blackbox Optimization"
+title: "ABySS Blackbox Optimization"
 author: "Nivretta Thatra"
 date: "October 15, 2016"
 output: github_document
@@ -30,11 +30,14 @@ knitr::opts_chunk$set(echo = TRUE)
 	  - *Grid Search Approach* 
 - Here we evaluate 3 optimization tools - Opal, SpearMint, and ParOpt - on a dataset of a human bacterial artificial chromosome (BAC), using the assembler [ABySS](https://github.com/bcgsc/abyss#readme). 
 
-- We find that: ~SPEARMINT is real fresh~
+- We find that: ~blah blah SPEARMINT is real fresh~
 
-#Goals  
+#Goals/Methods 
 ##Evaluate 3 parameter optimization tools for usability and speed
-  
+- Divvy up 3 tools for testing
+- Download ABySS 
+- Access dataset from ORCA computing machine
+
 - Backend  
 	- What types of input parameters (discrete with large/small ranges, continuous, binary)   
 	- Make it portable to other commandline tools so optimizer can be told how to launch the tool  
