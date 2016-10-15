@@ -9,17 +9,6 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
----
-title: "Blackbox-optimization"
-author: "Nivretta Thatra"
-date: "October 15, 2016"
-output: github_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 #Abstract
 - When tackling optimization of parameters, the process is manual and tedious: submitting jobs to a scheduler, rerunning failed jobs, inspecting outputs, tweaking parameters, and repeating. In genome sequence assembly, for example, there are a variety of parameters related to expected coverage of the reads and heuristics to remove read errors and collapse heterozygous variation.
 
@@ -68,7 +57,12 @@ knitr::opts_chunk$set(echo = TRUE)
 	  - 'nondifferentiable optimization tools'
 	  - 'runs on most platforms supporting the Python language and possessing a C++ compiler'
 	  - 'an optimization method supported by a strong convergence theory, yielding solutions that are local minimizers in a meaningful sense'
+	  
 	- [SpearMint](https://github.com/hips/spearmint) by @mgelbart — [Predictive Entropy Search for Multi-objective Bayesian Optimization](https://arxiv.org/abs/1511.05467)
+	  - Bayesian method for identifying the Pareto set of multi-objective optimization
+problems, when the functions are expensive to evaluate
+    - a sum of objective specific acquisition functions, which enables the algorithm to be used in decoupled scenarios in which the objectives can be evaluated separately and perhaps with different costs
+	
 	- [ParOpt](https://github.com/sseemayer/ParOpt) by @sseemayer 
 	  -[scipy.optimize](http://docs.scipy.org/doc/scipy/reference/optimize.html)
 	  -[Nelder-Mead](https://en.wikipedia.org/wiki/Nelder%E2%80%93Mead_method)
