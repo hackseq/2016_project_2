@@ -8,7 +8,7 @@
 - ParOpt - uses either grid search or Nelder–Mead to minimize an objective function derived from a command-line tool.
 
 
-Abyss_wrapper.py uses a python system call to run Abyss. It parses the ouput to report only the value of N50 (contiguity)
+Abyss_wrapper.py uses a python system call to run Abyss. It parses the output to report the value of N50 (contiguity) on its own.
 
 One can then use ParOpt to optimize k using a grid search - ParOpt will then tell you the optimum value, k.
 
