@@ -12,7 +12,7 @@ Abyss_wrapper.py uses a python system call to run Abyss. It parses the ouput to 
 
 One can then use ParOpt to optimize k using a grid search - ParOpt will then tell you the optimum value, k.
 
-using: [200k reads](ftp://ftp.bcgsc.ca/public/sjackman/200k.fq.gz)
+using: [200k reads](http://bit.ly/2edvq6T)
 ```time ../ParOpt/popt --grid max 'ParOpt/Abyss_wrapper.py {0}' 'fx = (.*)' 25,30,1```
 
 Output:
