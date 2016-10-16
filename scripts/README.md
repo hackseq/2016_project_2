@@ -8,11 +8,12 @@
 - ParOpt - uses either grid search or Nelder–Mead to minimize an objective function derived from a command-line tool.
 
 
-Abyss_wrapper.py uses a pyhon system call to run Abyss. It parses the ouput to report only the value of N50 (contiguity)
+Abyss_wrapper.py uses a python system call to run Abyss. It parses the ouput to report only the value of N50 (contiguity)
 
 One can then use ParOpt to optimize k using a grid search - ParOpt will then tell you the optimum value, k.
 
-```../ParOpt/popt --grid max 'ParOpt/Abyss_wrapper.py {0}' 'fx = (.*)' 25,30,1```
+```../ParOpt/popt --grid max 'ParOpt/Abyss_wrapper.py {0}' 'fx = (.*)' 25,30,1
+```
 
 Output:
 
@@ -27,3 +28,6 @@ Finished optimization after 5 evaluations.
 The optimal function value is -994.000000000000000000000000000000
 Optimal variables: 26
 ```
+Next steps:
+- It is possible to run ParOpt without the need of a wrapper function. A well defined regular expression for the Abyss.log should work with ParOpt.
+- Implement the Mead-nelder algorithm. At the moment - ParOpt gives deciminal values for each iteration (k=30.4) doesn't make sense. Force it to take integer values.
