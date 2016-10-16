@@ -1,0 +1,12 @@
+
+git pull
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/hackseq/2016_project_2
+
+
+git remote add origin https://github.com/lisabang/2016_project_2
+git push origin master
+
+
