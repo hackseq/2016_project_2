@@ -31,6 +31,5 @@ sys	0m12.301s
 ```
 
 Next steps:
-- It is possible to run ParOpt without the need of a wrapper function. A well defined regular expression for the Abyss.log should work with ParOpt. This was intially avoided as N50 is reported in exactly the same format in two parts of the log.
-- Implement the Nelder–Mead algorithm. At the moment - ParOpt gives deciminal values for each iteration (k=30.4) doesn't make sense. Force it to take integer values.
+- Skip the Nelder–Mead algorithm as is not good for this type of problem (integer based - non-convex).
 - For each value of k tested - output contiguity vs k and completeness metrics. Plot.
