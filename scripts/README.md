@@ -26,8 +26,8 @@ Output:
 4 f(2.900e+01) = 669.0
 Finished optimization after 5 evaluations.
 The optimal function value is -994.000000000000000000000000000000
-Optimal variables: 26
-```
+Optimal variables: 26```
+
 Next steps:
 - It is possible to run ParOpt without the need of a wrapper function. A well defined regular expression for the Abyss.log should work with ParOpt.
 - Implement the Mead-nelder algorithm. At the moment - ParOpt gives deciminal values for each iteration (k=30.4) doesn't make sense. Force it to take integer values.
