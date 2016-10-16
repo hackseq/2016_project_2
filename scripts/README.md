@@ -12,8 +12,7 @@ Abyss_wrapper.py uses a python system call to run Abyss. It parses the ouput to 
 
 One can then use ParOpt to optimize k using a grid search - ParOpt will then tell you the optimum value, k.
 
-```../ParOpt/popt --grid max 'ParOpt/Abyss_wrapper.py {0}' 'fx = (.*)' 25,30,1
-```
+```../ParOpt/popt --grid max 'ParOpt/Abyss_wrapper.py {0}' 'fx = (.*)' 25,30,1```
 
 Output:
 
@@ -26,7 +25,8 @@ Output:
 4 f(2.900e+01) = 669.0
 Finished optimization after 5 evaluations.
 The optimal function value is -994.000000000000000000000000000000
-Optimal variables: 26```
+Optimal variables: 26
+```
 
 Next steps:
 - It is possible to run ParOpt without the need of a wrapper function. A well defined regular expression for the Abyss.log should work with ParOpt.
