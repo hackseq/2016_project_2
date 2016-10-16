@@ -14,7 +14,8 @@ One can then use ParOpt to optimize k using a grid search - ParOpt will then tel
 
 using: [200k reads:](http://bit.ly/2edvq6T)
 
-```time ../ParOpt/popt --grid max '../ParOpt/Abyss_wrapper.py {0}' 'fx = (.*)' 30,45,1
+```
+time ../ParOpt/popt --grid max '../ParOpt/Abyss_wrapper.py {0}' 'fx = (.*)' 30,45,1
     0 f(3.000e+01) = 8329.0
     1 f(3.100e+01) = 7900.0
     2 f(3.200e+01) = 8452.0
