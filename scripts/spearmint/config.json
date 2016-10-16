@@ -3,6 +3,7 @@
   "main-file" : "abyss.py",
   "experiment-name" : "abyss-200k",
   "likelihood" : "NOISELESS",
+  "max-finished-jobs": 20,
   "variables" : {
     "k" : {
       "type" : "INT",
