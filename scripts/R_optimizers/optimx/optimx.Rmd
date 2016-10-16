@@ -80,7 +80,7 @@ testOptimx(
 ### one discrete parameter
 ```{r, echo=TRUE, warning=FALSE}
 testOptimx(
-    func = function(x){abs(floor(x[1])-4)}
+    func = function(x){abs(round(x[1])-4)}
     , init_param = c(0,0,0)
     )
 ```
