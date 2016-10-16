@@ -1,0 +1,15 @@
+{
+    "language"        : "PYTHON",
+    "main-file"       : "abyss.py",
+    "experiment-name" : "abyss-200k",
+    "likelihood"      : "NOISELESS",
+    "variables" : {
+        "k" : {
+            "type" : "INT",
+            "size" : 1,
+            "min"  : 16,
+            "max"  : 50
+        }
+    }
+}
+
