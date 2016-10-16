@@ -1,4 +1,3 @@
-library("readr")
 library("testthat")
 
 #' Runs Abyss
@@ -35,7 +34,9 @@ runAbyss<-function(input, name, k) {
         return(NULL)
     }
 
-    stats <- read_csv(paste(outdir, "/", name, "-stats.csv", sep=""))
+    statsFilename = paste(outdir, "/", name, "-stats.csv", sep="")
+    stats <<- read.csv(statsFilename)
+    print(stats)
     print("[DONE]")
     return(stats)
 }
@@ -53,6 +54,7 @@ runAbyssTest <- function(k) {
     }
 
     return(stats[[which(stats$name=="test-scaffolds.fa"), "N50"]])
+    #L50 as the second metric (quality?)
 }
 
 #runAbyssTest(k=25)
