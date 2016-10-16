@@ -1,0 +1,95 @@
+---
+title: "emoa_optimizer"
+author: "Jasleen Grewal"
+date: '2016-10-16'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Genetic Algorithms
+This is an R package that uses genetic algorithms for multi-objective, multi-parameter optimzation <https://cran.r-project.org/web/packages/mco/index.html>.
+
+```{r loadlibs, echo=FALSE}
+library("testthat")
+library("mco")
+library("readr")
+```
+
+##Source data reading functions 
+Let us source the wrapper functions for our tool (Abyss)
+
+```{r pressure, echo=FALSE}
+#TO DO: have a function here that wgets the data file and points infile var to downloaded file
+setwd("/Users/jgrewal/mygits/2016_project_2/")
+source(paste(getwd(), "scripts/R_optimizers/common/AbyssWrapper.R", sep="/"))
+```
+
+##Define function to optimize
+```{r funcopt, echo=TRUE}
+#Target metric is N50
+f <- function(x)  (return(runAbyssTest(k=round(x))))
+```
+
+##Get test parameter ranges
+```{r params, echo=TRUE}
+library("rjson")
+json_file <- paste(getwd(), "scripts/R_optimizers/common/config.json", sep="/")
+json_data <- fromJSON(paste(readLines(json_file), collapse=""))
+params = json_data$variables
+multiparam = list(k, np)
+#By default, if there is an integer ranged parameter, we will initialize the genetic algorithm population to half the size of the range of this parameter
+#If parameter is float, genetic algorithm population will be set by default to the range to the parameter
+getpoprange <- function(x){ifelse(x$type=="INT",(round((x$max-x$min)/2) - (round((x$max-x$min)/2) %% 4)), ((x$max-x$min) - ((x$max-x$min) %% 4)))}
+```
+
+##Call genalg algorithm (single param fit)
+We will be optimizing the parameter K, with single response variable N50 and also joint response over N50 and L50
+```{r genalg_func, echo=FALSE,results='hide'}
+inparam=params$k
+k_n50=function(x) abs(round(x[1])-5) + abs(round(x[2])-2)
+k_n50_l50=function(x) return(c(abs(round(x[1])-5),abs(round(x[1])-2)))
+#1 input, 1 output
+k_n50_fit = nsga2(k_n50,idim=1,odim=1,lower.bounds=c(inparam$min), upper.bounds=c(inparam$max),popsize=getpoprange(inparam), generations=100)
+paretoset <- paretoFront(k_n50_fit) #This is the metric output
+best_input <- k_n50_fit$par 
+
+k_n50_l50_fit = nsga2(k_n50_l50,idim=1,odim=2,lower.bounds=c(inparam$min), upper.bounds=c(inparam$max),popsize=getpoprange(inparam), generations=100,mprob = 0.01,cprob=0.2)
+paretoset <- paretoFront(k_n50_l50_fit) #This is the metric output
+
+```
+
+Now let us visualize the optimization results 
+```{r plotga, echo=FALSE}
+plot(x=round(k_n50_fit$par),y=seq(1,dim(k_n50_fit$par)[1],1), xlab="K value", ylab="Population set", main="Parameter space at final iteration \n Optimization over \nObjective function N50", xlim=c(inparam$min,inparam$max))
+plot(x=round(k_n50_l50_fit$par),y=seq(1,dim(k_n50_l50_fit$par)[1],1), xlab="K value", ylab="Population set", main="Parameter space at final iteration \n Joint optimization over \nObjective functions N50 and L50", xlim=c(inparam$min, inparam$max))
+```
+
+Lastly, let us visualize the Pareto Frontier for N50 with L50
+```{r plotga, echo=FALSE}
+plot(k_n50_l50_fit, xlab="metric 1, N50", ylab="metric 2, L50")
+```
+
+###Response variable vs Input parameter plot
+```{r varplot, echo=FALSE}
+
+```
+
+##Call GA algorithm (two param fit)
+We will be optimizing the parameters K and ??, with single response variable N50 and jointly over N50 and L50
+```{r gafunctwoparam, results='hide', eval=FALSE}
+inparam=params$k
+k_n50=function(x) abs(round(x[1])-5) + abs(round(x[2])-2)
+k_n50_l50=function(x) return(c(abs(round(x[1])-5),abs(round(x[1])-2)))
+#1 input, 1 output
+k_n50_fit = nsga2(k_n50,idim=1,odim=1,lower.bounds=c(inparam$min), upper.bounds=c(inparam$max),popsize=getpoprange(inparam), generations=100)
+paretoset <- paretoFront(k_n50_fit) #This is the metric output
+best_input <- k_n50_fit$par 
+
+k_n50_l50_fit = nsga2(k_n50_l50,idim=1,odim=2,lower.bounds=c(inparam$min), upper.bounds=c(inparam$max),popsize=getpoprange(inparam), generations=100,mprob = 0.01,cprob=0.2)
+paretoset <- paretoFront(k_n50_l50_fit) #This is the metric output
+```
+
+
