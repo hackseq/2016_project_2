@@ -1,3 +1,5 @@
+*.fq
+*.fq.gz
 *.pyc
 data/test-data
 runs
