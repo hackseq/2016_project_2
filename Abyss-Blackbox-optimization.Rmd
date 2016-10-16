@@ -67,6 +67,7 @@ problems, when the functions are expensive to evaluate
 	- [ParOpt](https://github.com/sseemayer/ParOpt) by @sseemayer 
 	  - [scipy.optimize](http://docs.scipy.org/doc/scipy/reference/optimize.html)
 	  - [Nelder-Mead](https://en.wikipedia.org/wiki/Nelder%E2%80%93Mead_method)
+	  - from a starting value, it will call the command line given to it repeatedly, converging into optimal parameters using the Nelder-mead algorithm or grid search
 	  
 	- Possibly R packages, [a long list](https://cran.r-project.org/web/views/Optimization.html)
 	- Possibly Python packages, [like scikit-optimize](https://scikit-optimize.github.io/)
