@@ -32,7 +32,7 @@ runAbyss<-function(input, name, k) {
 
     if (inherits(t1, "try-error") || !is.null(attr(t1,"status"))) {
         print("[FAILED]")
-        return()
+        return(NULL)
     }
 
     stats <- read_csv(paste(outdir, "/", name, "-stats.csv", sep=""))
@@ -48,9 +48,13 @@ runAbyssTest <- function(k) {
     stats <- runAbyss("$PWD/data/test-data/reads1.fastq $PWD/data/test-data/reads2.fastq",
              "test",
              k)
+    if (is.null(stats)) {
+        return(-1)
+    }
+
     return(stats[[which(stats$name=="test-scaffolds.fa"), "N50"]])
 }
 
-runAbyssTest(k=32)
+#runAbyssTest(k=25)
 
 
