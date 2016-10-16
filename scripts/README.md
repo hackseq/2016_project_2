@@ -17,11 +17,13 @@ One can then use ParOpt to optimize k using a grid search - ParOpt will then tel
 Output:
 
 
-``` 0 f(2.500e+01) = 604.0
-    1 f(2.600e+01) = 994.0
-    2 f(2.700e+01) = 869.0
-    3 f(2.800e+01) = 793.0
-    4 f(2.900e+01) = 669.0
+``` 
+0 f(2.500e+01) = 604.0
+1 f(2.600e+01) = 994.0
+2 f(2.700e+01) = 869.0
+3 f(2.800e+01) = 793.0
+4 f(2.900e+01) = 669.0
 Finished optimization after 5 evaluations.
 The optimal function value is -994.000000000000000000000000000000
-Optimal variables: 26```
+Optimal variables: 26
+```
