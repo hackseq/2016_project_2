@@ -58,7 +58,7 @@ runAbyssTest <- function(k) {
     #L50 as the second metric (quality?)
 }
 
-#' Runs Abyss for the 200k data
+#' Runs Abyss for the hsapiens chromosme 3 with 200k reads
 #'
 #' @param k size of a single k-mer in a k-mer pair (bp)
 #' @export
@@ -70,6 +70,20 @@ runAbyss200k <- function(k) {
         return(-1)
     }
     return(stats[[which(stats$name=="200k-scaffolds.fa"), "N50"]])
+}
+
+#' Runs Abyss for the hsapiens chromosme 3 with 500k reads
+#'
+#' @param k size of a single k-mer in a k-mer pair (bp)
+#' @export
+runAbyss500k <- function(k) {
+    stats <- runAbyss("$PWD/data/500k.fq",
+                      "500k",
+                      k)
+    if (is.null(stats)) {
+        return(-1)
+    }
+    return(stats[[which(stats$name=="500k-scaffolds.fa"), "N50"]])
 }
 
 
