@@ -2,7 +2,9 @@
 title: "Optimizing abyss with optimx"
 author: "Hamid Younesy"
 date: "October 16, 2016"
-output: pdf_document
+output:
+  html_document:
+    keep_md: yes
 ---
 
 ## Introduction
@@ -156,8 +158,10 @@ plotOptimx <- function(optimxResults,
         ylab(paste("best", metricLabel))
     #print(p)
     
-    multiplot(p1, p2, p3, cols=1)
-
+    #multiplot(p1, p2, p3, cols=1)
+    print(p1)
+    print(p2)
+    print(p3)
 }
 ```
 
@@ -170,7 +174,7 @@ Interestingly convergence did not happen for most algorithms in optimx's package
 
 ### Two continious parameters: f(x1, x2) = abs(x1 - 5) + abs(x2 - 4)
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.height=9}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 optimxResult <- testOptimx(
     func = function(x){abs(x[1]-5) + abs(x[2]-4)}
     , init_param = c(0, 0)
@@ -184,7 +188,7 @@ plotOptimx(optimxResult
 
 ### One continious and one discrete parameter: f(x1, x2) = abs(x1 - 5) + abs(round(x2)-4)
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.height=9}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 optimxResult <- testOptimx(
     func = function(x){abs(x[1]-5) + abs(round(x[2])-4)}
     , init_param = c(0, 0)
@@ -198,7 +202,7 @@ plotOptimx(optimxResult
 
 ### Two discrete parameters: f(x1, x2) = abs(round(x1)-5) + abs(round(x2)-4)
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.height=9}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 optimxResult <- testOptimx(
     func = function(x){abs(round(x[1])-5) + abs(round(x[2])-4)}
     , init_param = c(0, 0)
@@ -211,8 +215,13 @@ plotOptimx(optimxResult
 ```
 
 ## Testing with abyss
-## Data: hsapien chr3, 500k reads
-```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, results='hide', fig.height=10}
+Data: hsapien chr3, 500k reads
+
+Varying paramter: k
+
+Fixed parameters: s = 200, l = 25
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, results='hide'}
 setwd("/Users/hyounesy/SFU/Hackseq2016/2016_project_2")
 source(paste(getwd(), "scripts/R_optimizers/common/AbyssWrapper.R", sep="/"))
 optimxResult <- testOptimx(
@@ -222,7 +231,7 @@ optimxResult <- testOptimx(
     )
 
 plotOptimx(optimxResult
-    , metricLim=c(0, 20000), p1Lim=c(0, 50)
+    , metricLim=c(0, 30000), p1Lim=c(0, 50)
     , metricLabel="N50", p1Label="k"
     )
 ```
