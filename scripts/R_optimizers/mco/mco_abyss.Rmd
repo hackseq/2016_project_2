@@ -1,5 +1,5 @@
 ---
-title: "emoa_optimizer"
+title: "mco_optimizer"
 author: "Jasleen Grewal"
 date: '2016-10-16'
 output: html_document
@@ -19,18 +19,12 @@ library("readr")
 ```
 
 ##Source data reading functions 
-Let us source the wrapper functions for our tool (Abyss)
-
+Let us source the wrapper functions for our tool (Abyss), and the querying functions  
 ```{r pressure, echo=FALSE}
 #TO DO: have a function here that wgets the data file and points infile var to downloaded file
-setwd("/Users/jgrewal/mygits/2016_project_2/")
+#setwd("/Users/jgrewal/mygits/2016_project_2/")
+print(getwd())
 source(paste(getwd(), "scripts/R_optimizers/common/AbyssWrapper.R", sep="/"))
-```
-
-##Define function to optimize
-```{r funcopt, echo=TRUE}
-#Target metric is N50
-f <- function(x)  (return(runAbyssTest(k=round(x))))
 ```
 
 ##Get test parameter ranges
@@ -49,16 +43,14 @@ getpoprange <- function(x){ifelse(x$type=="INT",(round((x$max-x$min)/2) - (round
 We will be optimizing the parameter K, with single response variable N50 and also joint response over N50 and L50
 ```{r genalg_func, echo=FALSE,results='hide'}
 inparam=params$k
-k_n50=function(x) abs(round(x[1])-5) + abs(round(x[2])-2)
-k_n50_l50=function(x) return(c(abs(round(x[1])-5),abs(round(x[1])-2)))
 #1 input, 1 output
-k_n50_fit = nsga2(k_n50,idim=1,odim=1,lower.bounds=c(inparam$min), upper.bounds=c(inparam$max),popsize=getpoprange(inparam), generations=100)
+k_n50_fit = nsga2(Abyss_n50,idim=1,odim=1,lower.bounds=c(inparam$min), upper.bounds=c(inparam$max),popsize=getpoprange(inparam), generations=100,  mprob=0.01, cprob=0.2)
 paretoset <- paretoFront(k_n50_fit) #This is the metric output
 best_input <- k_n50_fit$par 
 
-k_n50_l50_fit = nsga2(k_n50_l50,idim=1,odim=2,lower.bounds=c(inparam$min), upper.bounds=c(inparam$max),popsize=getpoprange(inparam), generations=100,mprob = 0.01,cprob=0.2)
+k_n50_l50_fit = nsga2(Abyss_n50_l50,idim=1,odim=2,lower.bounds=c(inparam$min), upper.bounds=c(inparam$max),popsize=getpoprange(inparam), generations=100,mprob = 0.01,cprob=0.2)
 paretoset <- paretoFront(k_n50_l50_fit) #This is the metric output
-
+best_input = k_n50_l50_fit$par  
 ```
 
 Now let us visualize the optimization results 
@@ -78,18 +70,20 @@ plot(k_n50_l50_fit, xlab="metric 1, N50", ylab="metric 2, L50")
 ```
 
 ##Call GA algorithm (two param fit)
-We will be optimizing the parameters K and ??, with single response variable N50 and jointly over N50 and L50
+We will be optimizing the parameters **k** and **s**, with single response variable N50 and jointly over N50 and L50
 ```{r gafunctwoparam, results='hide', eval=FALSE}
-inparam=params$k
-k_n50=function(x) abs(round(x[1])-5) + abs(round(x[2])-2)
-k_n50_l50=function(x) return(c(abs(round(x[1])-5),abs(round(x[1])-2)))
-#1 input, 1 output
-k_n50_fit = nsga2(k_n50,idim=1,odim=1,lower.bounds=c(inparam$min), upper.bounds=c(inparam$max),popsize=getpoprange(inparam), generations=100)
-paretoset <- paretoFront(k_n50_fit) #This is the metric output
-best_input <- k_n50_fit$par 
+#TO DO : write this better so it automatically concatenates subfeatures per param  
+inparam1 = params$k
+inparam2 = params$s
 
-k_n50_l50_fit = nsga2(k_n50_l50,idim=1,odim=2,lower.bounds=c(inparam$min), upper.bounds=c(inparam$max),popsize=getpoprange(inparam), generations=100,mprob = 0.01,cprob=0.2)
-paretoset <- paretoFront(k_n50_l50_fit) #This is the metric output
+#2 inputs, 1 output
+ks_n50_fit = nsga2(Abyss_n50,idim=2,odim=1,lower.bounds=c(inparam1$min, inparam2$min), upper.bounds=c(inparam1$max, inparam2$max),popsize=max(getpoprange(inparam1), getpoprange(inparam2)), generations=100, mprob=0.01, cprob=0.2) 
+paretoset <- paretoFront(ks_n50_fit) #This is the metric output
+best_input <- ks_n50_fit$par 
+
+ks_n50_l50_fit = nsga2(Abyss_n50_l50,idim=2,odim=2,lower.bounds=c(inparam1$min, inparam2$min), upper.bounds=c(inparam1$max, inparam2$max),popsize=max(getpoprange(inparam1), getpoprange(inparam2)), generations=100,mprob = 0.01,cprob=0.2)
+paretoset <- paretoFront(ks_n50_l50_fit) #This is the metric output
+best_input <- ks_n50_l50_fit$par
 ```
 
 

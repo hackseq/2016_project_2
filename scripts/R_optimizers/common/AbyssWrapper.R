@@ -7,7 +7,7 @@ library("testthat")
 #' @param name      The name of this assembly
 #' @param k         size of a single k-mer in a k-mer pair (bp)
 #' @export
-runAbyss<-function(input, name, k) {
+runAbyss<-function(input, name, k, s=1000) {
     outdir = paste(name, "_abyss_k", k, sep="")
     dir.create(file.path(".", "runs"), showWarnings = FALSE)
     dir.create(file.path("runs", outdir), showWarnings = FALSE)
@@ -16,6 +16,7 @@ runAbyss<-function(input, name, k) {
     cmd <- paste("abyss-pe",
                  " -C ", outdir,
                  " k=", k,
+                 " s=", s,
                  " name=", name,
                  " in=\"", input, "\"",
                  sep = "")
@@ -74,4 +75,27 @@ runAbyss200k <- function(k) {
 
 #runAbyss200k(k=25)
 
+##Define shared functions for k, s inputs and N50, L50 output calls
+Abyss_n50 <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k"){
+	#paramlist=c(k,s)
+	k = paramlist[1]
+	ifelse(length(paramlist)==1, s=1000, s=paramlist[2])
+	#Launch Abyss with input params
+	stats <- runAbyss(input=infile, name=outpref, k=k, s=s)
+	if (is.null(stats)){
+		return(-1)
+	}
+	#Need to fix this so name matching is for <whatever>-scaffolds.fa
+	return(stats[[which(stats$name=="200k-scaffolds.fa"), "N50"]])
+}
 
+Abyss_n50_l50 <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k"){
+	#paramlist=c(k,s)
+        k = paramlist[1]
+        ifelse(length(paramlist)==1, s=1000, s=paramlist[2])
+        #Launch Abyss with input params
+	stats <- runAbyss(input=infile, name=outpref, k=k, s=s)
+	if (is.null(stats)){return(-1)}
+	#Need to fix this so name matching is for <whatever>-scaffolds.fa
+	return(c(stats[[which(stats$name=="200k-scaffolds.fa"), "N50"]], stats[[which(stats$name=="200k-scaffolds.fa"), "L50"]]))
+}
