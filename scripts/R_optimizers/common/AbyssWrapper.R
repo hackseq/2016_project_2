@@ -1,5 +1,5 @@
 library("testthat")
-
+s_default = 200
 #' Runs Abyss
 #'
 #' Runs abyss with the specified parameters.
@@ -7,7 +7,7 @@ library("testthat")
 #' @param name      The name of this assembly
 #' @param k         size of a single k-mer in a k-mer pair (bp)
 #' @export
-runAbyss<-function(input, name, k, s=1000) {
+runAbyss<-function(input, name, k, s=s_default) {
     outdir = paste(name, "_abyss_k", k, "_s",s, sep="")
     dir.create(file.path(".", "runs"), showWarnings = FALSE)
     dir.create(file.path("runs", outdir), showWarnings = FALSE)
@@ -74,14 +74,21 @@ runAbyss200k <- function(k) {
 
 
 #runAbyss200k(k=25)
-
+##Since we don't want to test every plausible value of s, only multiples of 10^(something)
+##We will 'rescale' the input s value
+##Input s values of format m.nyz transforms into (100*m) + (10*n)
+##Ex. s input 2.534 will convert to 250
+stepadjust <- function(x){
+	return(round(2.53,1)*100)	
+}
 ##Define shared functions for k, s inputs and N50, L50 output calls
 Abyss_n50 <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k", maximizer=-1){
 	#paramlist=c(k,s)
 	#maximizer= -1 when optimization function is a minimization function
 	#maximizer=1 when optimization function is a maximization function
 	k = round(paramlist[1])
-	s = ifelse(length(paramlist)==1, 1000, round(paramlist[2]))
+	s = ifelse(length(paramlist)==1, s_default, round(paramlist[2]))
+	s = stepadjust(s)
 	#Launch Abyss with input params
 	stats <- runAbyss(input=infile, name=outpref, k=k, s=s)
 	if (is.null(stats)){
@@ -96,8 +103,9 @@ Abyss_n50_l50 <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k",
 	#maximizer= -1 when optimization function is a minimization function
 	#maximizer=1 when optimization function is a maximization function
         k = round(paramlist[1])
-        s = ifelse(length(paramlist)==1, 1000, round(paramlist[2]))
+        s = ifelse(length(paramlist)==1, s_default, round(paramlist[2]))
         #Launch Abyss with input params
+	s = stepadjust(s)
 	stats <- runAbyss(input=infile, name=outpref, k=k, s=s)
 	if (is.null(stats)){return(-1)}
 	#Need to fix this so name matching is for <whatever>-scaffolds.fa

@@ -10,9 +10,9 @@
         },
         "s" : {
             "type" : "INT",
-            "size" : 1,
-            "min"  : 200,
-            "max"  : 1000
+            "size" : 100,
+            "min"  : 2,
+            "max"  : 10
         },
         "l" : {
             "type" : "INT",
