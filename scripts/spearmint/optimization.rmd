@@ -16,25 +16,38 @@ library(tidyverse)
 # Read the data
 ```{r read-data}
 data_orig <- read_tsv("results/iterations.tsv")
-data <- data_orig %>%
+data_k <- data_orig %>%
 	select(k, N50) %>%
+	distinct() %>%
+	mutate(Best_N50 = cummax(N50), Iteration = row_number())
+data_l <- data_orig %>%
+	select(l, N50) %>%
 	distinct() %>%
 	mutate(Best_N50 = cummax(N50), Iteration = row_number())
 ```
 
 # N50 vs k
 ```{r plot-N50-vs-k}
-ggplot(data) +
+ggplot(data_k) +
 	aes(x = k, y = N50, label = Iteration) +
 	geom_point() +
 	geom_line() +
 	geom_text_repel()
 ```
 
+# N50 vs l
+```{r plot-N50-vs-l}
+ggplot(data_l) +
+	aes(x = l, y = N50, label = Iteration) +
+	geom_point() +
+	geom_line() +
+	geom_text_repel()
+```
+
 # Best N50 vs Iteration
-```{r plot-N50-vs-iteration}
-ggplot(data) +
-	aes(x = Iteration, y = N50, label = k) +
+```{r plot-N50-l-vs-iteration}
+ggplot(data_l) +
+	aes(x = Iteration, y = N50, label = l) +
 	geom_point() +
 	geom_text_repel() +
 	geom_line(aes(y = Best_N50))
