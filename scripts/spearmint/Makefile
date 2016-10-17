@@ -1,4 +1,5 @@
 k=32
+l=30
 
 # Report run time and memory usage
 export SHELL=zsh -opipefail
@@ -6,8 +7,9 @@ export REPORTTIME=1
 export TIMEFMT=time user=%U system=%S elapsed=%E cpu=%P memory=%M job=%J
 
 all: \
-	results/200k/k$k/hsapiens-scaffolds.fac.tsv \
-	results/200k.fac.tsv
+	results/200k/k$k/l$l/hsapiens-scaffolds.fac.tsv \
+	results/200k.fac.tsv \
+	results/optimization.html
 
 .DELETE_ON_ERROR:
 .SECONDARY:
@@ -31,9 +33,9 @@ data/400k.fq.gz: data/30CJCAAXX_4.fq.gz
 	gunzip -c $< >$@
 
 # Assemble the data with ABySS.
-results/200k/k$k/hsapiens-scaffolds.fa: data/200k.fq
+results/200k/k$k/l$l/hsapiens-scaffolds.fa: data/200k.fq
 	mkdir -p $(@D)
-	abyss-pe -C $(@D) name=hsapiens k=$k in=$(realpath $<)
+	abyss-pe -C $(@D) name=hsapiens k=$k l=$l in=$(realpath $<)
 
 # Calculate the assembly contiguity metrics.
 %.fac.tsv: %.fa
@@ -41,8 +43,8 @@ results/200k/k$k/hsapiens-scaffolds.fa: data/200k.fq
 
 # Concatenate multiple TSV files.
 results/200k.fac.tsv: \
-		results/200k/k*/hsapiens-scaffolds.fac.tsv \
-		results/200k/k$k/hsapiens-scaffolds.fac.tsv
+		results/200k/k*/l*/hsapiens-scaffolds.fac.tsv \
+		results/200k/k$k/l$l/hsapiens-scaffolds.fac.tsv
 	mlr --tsvlite cat $^ >$@
 	datamash -H max N50 <$@
 	head -n1 $@; grep $$(datamash -H max N50 <$@ | tail -n1) $@
