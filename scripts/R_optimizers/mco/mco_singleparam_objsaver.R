@@ -22,7 +22,7 @@ k_n50_fit = nsga2(Abyss_n50,idim=1,odim=1,lower.bounds=c(inparam$min), upper.bou
 save(k_n50_fit, list=character(), file=paste(getwd(), "/scripts/R_optimizers/mco/interm_objs/","k_n50_fit.obj",sep=""))
  
 ##To load, load(blah_address)
-
+print("Optimizing K over n50 and l50 together. Negative opt for n50, positive for l50")
 k_n50_l50_fit = nsga2(Abyss_n50_l50,idim=1,odim=2,lower.bounds=c(inparam$min), upper.bounds=c(inparam$max),popsize=getpoprange(inparam), generations=100,mprob = 0.01,cprob=0.2)
 
 save(k_n50_l50_fit, list=character(), file=paste(getwd(), "/scripts/R_optimizers/mco/interm_objs/","k_n50_l50_fit.obj",sep=""))

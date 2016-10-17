@@ -124,7 +124,7 @@ Abyss_n50_l50 <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k",
         #Launch Abyss with input params
 	s = stepadjust(s)
 	stats <- runAbyss(input=infile, name=outpref, k=k, s=s, l=l)
-	if (is.null(stats)){return(-1)}
+	if (is.null(stats)){return(c(-1,1))} #This needs to be fixed later, nul
 	#Need to fix this so name matching is for <whatever>-scaffolds.fa
 	return(c(stats[[which(stats$name=="200k-scaffolds.fa"), "N50"]]*maximizer, stats[[which(stats$name=="200k-scaffolds.fa"), "L50"]] * maximizer * -1))
 }
@@ -140,7 +140,7 @@ Abyss_n50_n <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k", m
         #Launch Abyss with input params
         s = stepadjust(s)
         stats <- runAbyss(input=infile, name=outpref, k=k, s=s, l=l)
-        if (is.null(stats)){return(-1)}
+        if (is.null(stats)){return(c(-1,1))}
         #Need to fix this so name matching is for <whatever>-scaffolds.fa
         return(c(stats[[which(stats$name=="200k-scaffolds.fa"), "N50"]]*maximizer, stats[[which(stats$name=="200k-scaffolds.fa"), "n"]] * maximizer))
 }
