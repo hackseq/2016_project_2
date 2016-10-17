@@ -48,9 +48,12 @@ dfm.melt$l = as.factor(dfm.melt$l)
 
 # plot the heatmap
 
-```{r}
+```{r }
 ggplot(dfm.melt, aes(l,k)) + geom_tile(aes(fill = N50), colour = "white")
+ggsave("heatmap.png")
 ```
+
+
 
 
 
