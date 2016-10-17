@@ -57,6 +57,21 @@ runAbyssTest <- function(k) {
     #L50 as the second metric (quality?)
 }
 
-#runAbyssTest(k=25)
+#' Runs Abyss for the 200k data
+#'
+#' @param k size of a single k-mer in a k-mer pair (bp)
+#' @export
+runAbyss200k <- function(k) {
+    stats <- runAbyss("$PWD/data/200k.fq",
+                      "200k",
+                      k)
+    if (is.null(stats)) {
+        return(-1)
+    }
+    return(stats[[which(stats$name=="200k-scaffolds.fa"), "N50"]])
+}
+
+
+#runAbyss200k(k=25)
 
 
