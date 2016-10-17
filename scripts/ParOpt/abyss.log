@@ -1,0 +1,324 @@
+ABYSS -k44 -q3 -v   --coverage-hist=coverage.hist -s reads-bubbles.fa  -o reads-1.fa 200k.fq 
+ABySS 2.0.1
+ABYSS -k44 -q3 -v --coverage-hist=coverage.hist -s reads-bubbles.fa -o reads-1.fa 200k.fq
+Reading `200k.fq'...
+Read 100000 reads. Hash load: 405957 / 1073741824 = 0.000378 using 2.87 GB
+Read 198948 reads. Hash load: 646819 / 1073741824 = 0.000602 using 2.88 GB
+`200k.fq': discarded 1052 reads shorter than 44 bases
+`200k.fq': discarded 1768 reads containing non-ACGT characters
+Loaded 646819 k-mer
+Hash load: 646819 / 2097152 = 0.308 using 2.56 GB
+Unable to determine minimum k-mer coverage
+Coverage: 0	Reconstruction: 646819
+Coverage: 1	Reconstruction: 646819
+Using a coverage threshold of 1...
+The median k-mer coverage is 1
+The reconstruction is 646819
+The k-mer coverage threshold is 1
+Setting parameter e (erode) to 2
+Setting parameter E (erodeStrand) to 0
+Setting parameter c (coverage) to 2
+Generating adjacency
+Added 1171015 edges.
+Eroding tips
+Eroded 443497 tips.
+Eroded 0 tips.
+Hash load: 203322 / 524288 = 0.388 using 2.54 GB
+Pruning tips shorter than 1 bp...
+Removed 256 marked k-mer.
+Pruned 256 k-mer in 256 tips.
+Pruning tips shorter than 2 bp...
+Removed 526 marked k-mer.
+Pruned 526 k-mer in 497 tips.
+Pruning tips shorter than 4 bp...
+Removed 1632 marked k-mer.
+Pruned 1632 k-mer in 881 tips.
+Pruning tips shorter than 8 bp...
+Removed 5799 marked k-mer.
+Pruned 5799 k-mer in 1742 tips.
+Pruning tips shorter than 16 bp...
+Removed 2937 marked k-mer.
+Pruned 2937 k-mer in 462 tips.
+Pruning tips shorter than 32 bp...
+Removed 7213 marked k-mer.
+Pruned 7213 k-mer in 594 tips.
+Pruning tips shorter than 44 bp...
+Removed 5777 marked k-mer.
+Pruned 5777 k-mer in 302 tips.
+Pruning tips shorter than 44 bp...
+Pruned 4734 tips in 7 rounds.
+Hash load: 179182 / 524288 = 0.342 using 2.54 GB
+Marked 92 edges of 45 ambiguous vertices.
+Removing low-coverage contigs (mean k-mer coverage < 2)
+Found 179177 k-mer in 1060 contigs before removing low-coverage contigs.
+Removed 82 k-mer in 3 low-coverage contigs.
+Split 3 ambigiuous branches.
+Hash load: 179100 / 524288 = 0.342 using 2.54 GB
+Eroding tips
+Eroded 0 tips.
+Eroded 0 tips.
+Hash load: 179100 / 524288 = 0.342 using 2.54 GB
+Pruning tips shorter than 1 bp...
+Pruning tips shorter than 2 bp...
+Pruning tips shorter than 4 bp...
+Pruning tips shorter than 8 bp...
+Pruning tips shorter than 16 bp...
+Pruning tips shorter than 32 bp...
+Pruning tips shorter than 44 bp...
+Pruned 0 tips in 6 rounds.
+Hash load: 179100 / 524288 = 0.342 using 2.54 GB
+Popping bubbles
+Removed 0 bubbles
+Marked 84 edges of 42 ambiguous vertices.
+Left 5 unassembled k-mer in circular contigs.
+Assembled 179095 k-mer in 1055 contigs.
+Removed 467719 k-mer.
+The signal-to-noise ratio (SNR) is -4.17 dB.
+AdjList -v   -k44 -m50 --dot reads-1.fa >reads-1.dot
+Reading `reads-1.fa'...
+Finding overlaps of exactly k-1 bp...
+V=2110 E=120 E/V=0.0569
+Degree: █
+        01234
+0: 96% 1: 1.7% 2-4: 2% 5+: 0% max: 2
+abyss-filtergraph -v --dot   -k44 -g reads-2.dot1 reads-1.dot reads-1.fa >reads-1.path
+Loading graph from file: reads-1.dot
+Graph stats before:
+V=2110 E=120 E/V=0.0569
+Degree: █
+        01234
+0: 96% 1: 1.7% 2-4: 2% 5+: 0% max: 2
+Removing shim contigs from the graph...
+Pass 1: Checking 8 contigs.
+Shim removal stats:
+Removed: 4 Too Complex: 7 Tails: 1037 Too Long: 5 Self Adjacent: 2 Parallel Edges: 0
+Reading `reads-1.fa'...
+Edge removal stats:
+Removed: 0
+Graph stats after:
+V=2102 E=112 E/V=0.0533
+Degree: █
+        01234
+0: 97% 1: 1.3% 2-4: 2% 5+: 0% max: 2
+MergeContigs -v  -k44 -g reads-2.dot -o reads-2.fa reads-1.fa reads-2.dot1 reads-1.path
+Reading `reads-2.dot1'...
+Read 2102 vertices. Using 2.49 GB of memory.
+Reading `reads-1.fa'...
+Read 1051 sequences. Using 2.5 GB of memory.
+Reading `reads-1.path'...
+Read 0 paths. Using 2.51 GB of memory.
+Writing `reads-2.dot'...
+V=2102 E=112 E/V=0.0533
+Degree: █
+        01234
+0: 97% 1: 1.3% 2-4: 2% 5+: 0% max: 2
+PopBubbles -v --dot -j2 -k44  -p0.9  -g reads-3.dot reads-2.fa reads-2.dot >reads-2.path
+Reading `reads-2.dot'...
+V=2102 E=112 E/V=0.0533
+Degree: █
+        01234
+0: 97% 1: 1.3% 2-4: 2% 5+: 0% max: 2
+Reading `reads-2.fa'...
+Bubbles: 2 Popped: 0 Scaffolds: 0 Complex: 2 Too long: 0 Too many: 0 Dissimilar: 0
+V=2102 E=112 E/V=0.0533
+Degree: █
+        01234
+0: 97% 1: 1.3% 2-4: 2% 5+: 0% max: 2
+MergeContigs -v  -k44 -o reads-3.fa reads-2.fa reads-2.dot reads-2.path
+Reading `reads-2.dot'...
+Read 2102 vertices. Using 2.5 GB of memory.
+Reading `reads-2.fa'...
+Read 1051 sequences. Using 2.52 GB of memory.
+Reading `reads-2.path'...
+Read 0 paths. Using 2.52 GB of memory.
+awk '!/^>/ {x[">" $1]=1; next} {getline s} $1 in x {print $0 "\n" s}' \
+		reads-2.path reads-1.fa >reads-indel.fa
+abyss-map -v  -j2 -l40    200k.fq reads-3.fa \
+		|abyss-fixmate -v  -l40  -h reads-3.hist \
+		|sort -snk3 -k4 \
+		|gzip >reads-3.sam.gz
+abyss-index -v --fai reads-3.fa
+Reading `reads-3.fa'...
+Reading from standard input...
+Reading `reads-3.fa'...
+Read 1051 contigs.
+Writing `reads-3.fa.fai'...
+Using 2.5 GB of memory and 2.38e+06 B/sequence.
+Reading `reads-3.fa'...
+Building the suffix array...
+Building the Burrows-Wheeler transform...
+Building the character occurrence table...
+Read 239 kB in 1051 contigs.
+Using 2.51 GB of memory and 1.05e+04 B/bp.
+Mapped 128449 of 200000 reads (64.2%)
+Mapped 128382 of 200000 reads uniquely (64.2%)
+Read 200000 alignments
+Mateless        0
+Unaligned   25957  26%
+Singleton   19637  19.6%
+FR          22701  22.7%
+RF              0
+FF             17  0.017%
+Different   31688  31.7%
+Total      100000
+FR Stats mean: 195.8 median: 203 sd: 26.35 n: 22696 min: 40 max: 249 ignored: 5
+                                                __▁▂▄▆███▅▂_
+gunzip -c reads-3.sam.gz \
+	|DistanceEst -v  -j2 -k44 -l40 -s1000 -n10   -o reads-3.dist reads-3.hist
+Mate orientation FR: 22701 (100%) RF: 0 (0%)
+The library reads-3.hist is oriented forward-reverse (FR).
+Stats mean: 195.8 median: 203 sd: 26.35 n: 22696 min: 40 max: 249
+                                                __▁▂▄▆███▅▂_
+Minimum and maximum distance are set to -43 and 249 bp.
+Duplicate rate of spanning fragments: 7/370 (1.89%)
+Overlap -v --dot   -k44 -g reads-4.dot -o reads-4.fa reads-3.fa reads-3.dot reads-3.dist
+260+	483+	6
+929+	260+	37
+268+	600-	29	1
+274-	268+	36	1
+451+	1001+	37	3
+563-	451+	41
+769+	970+	8
+455+	769+	21	1
+608-	859+	23
+Overlap: 9
+Scaffold: 0
+No overlap: 0
+Insignificant (<5bp): 0
+Homopolymer: 0
+Motif: 0
+Ambiguous: 0
+SimpleGraph -v   -j2 -k44 -o reads-4.path1 reads-4.dot reads-3.dist
+abyss-index -v --fai reads-4.fa
+Reading `reads-4.dot'...
+Reading `reads-4.fa'...
+Read 0 contigs.
+Writing `reads-4.fa.fai'...
+V=2102 E=130 E/V=0.0618
+Degree: █
+        01234
+0: 96% 1: 2.2% 2-4: 2% 5+: 0% max: 2
+Reading `reads-3.dist'...
+
+* 268-
+Constraints: 274+,-24
+Paths: 1
+274+
+274+,-41,61,3.4	dist: -36 diff: 5 buffer: 17 n: 61
+Solutions: 1
+274+ length: 148 sumdiff: 5
+
+* 268+
+Constraints: 160-,86 600-,-3
+Solutions: 0
+
+* 260-
+Constraints: 929-,-21
+Paths: 1
+929-
+929-,-39,50,3.7	dist: -37 diff: 2 buffer: 18 n: 50
+Solutions: 1
+929- length: 156 sumdiff: 2
+
+* 260+
+Constraints: 483+,17
+Paths: 1
+483+
+483+,-4,29,4.9	dist: -6 diff: -2 buffer: 21 n: 29
+Solutions: 1
+483+ length: 394 sumdiff: 2
+
+* 451-
+Constraints: 563+,-22
+Paths: 1
+563+
+563+,-43,29,4.9	dist: -41 diff: 2 buffer: 21 n: 29
+Solutions: 1
+563+ length: 66 sumdiff: 2
+
+* 769-
+Constraints: 455-,5
+Paths: 1
+455-
+455-,-19,21,5.7	dist: -21 diff: -2 buffer: 24 n: 21
+Solutions: 1
+455- length: 81 sumdiff: 2
+
+* 451+
+Constraints: 1001+,-17
+Paths: 1
+1001+
+1001+,-34,53,3.6	dist: -37 diff: -3 buffer: 17 n: 53
+Solutions: 1
+1001+ length: 162 sumdiff: 3
+
+* 769+
+Constraints: 970+,2
+Paths: 1
+970+
+970+,-17,42,4.1	dist: -8 diff: 9 buffer: 19 n: 42
+Solutions: 1
+970+ length: 118 sumdiff: 9
+
+* 859-
+Constraints: 608+,3
+Paths: 1
+608+
+608+,-16,38,4.3	dist: -23 diff: -7 buffer: 19 n: 38
+Solutions: 1
+608+ length: 153 sumdiff: 7
+
+Total paths attempted: 9
+Unique path: 8
+No possible paths: 1
+No valid paths: 0
+Repetitive: 0
+Multiple valid paths: 0
+Too many solutions: 0
+Too complex: 0
+
+The minimum number of pairs in a distance estimate is 15.
+The minimum number of pairs used in a path is 21.
+Consider increasing the number of pairs threshold paramter, n, to 21.
+cat reads-3.fa.fai reads-4.fa.fai \
+		|MergePaths -v  -j2 -k44  -o reads-4.path2 - reads-4.path1
+Reading `-'...
+Reading `reads-4.path1'...
+Added 0 missing edges.
+Removed 0 transitive edges of 0 edges leaving 0 edges.
+Removed 0 small overlap edges.
+V=10 E=0 E/V=0
+Degree:  █
+        01234
+0: 1e+02% 1: 0% 2-4: 0% 5+: 0% max: 0
+
+Merging paths
+Removing redundant contigs
+PathOverlap --assemble -v  -k44  reads-4.dot reads-4.path2 >reads-4.path3
+Reading `reads-4.dot'...
+Reading `reads-4.path2'...
+cat reads-3.fa reads-4.fa \
+		|PathConsensus -v --dot -k44  -p0.9  -o reads-5.path -s reads-5.fa -g reads-5.dot - reads-4.dot reads-4.path3
+Reading `reads-4.dot'...
+Reading `-'...
+Reading `reads-4.path3'...
+Read 5 paths
+Ambiguous paths: 0
+Merged:          0
+No paths:        0
+Too many paths:  0
+Too complex:     0
+Dissimilar:      0
+cat reads-3.fa reads-4.fa reads-5.fa |MergeContigs -v  -k44 -o reads-6.fa - reads-5.dot reads-5.path
+Reading `reads-5.dot'...
+Read 2102 vertices. Using 2.52 GB of memory.
+Reading `-'...
+Read 1051 sequences. Using 2.52 GB of memory.
+Reading `reads-5.path'...
+Read 5 paths. Using 2.52 GB of memory.
+The minimum coverage of single-end contigs is 2.
+The minimum coverage of merged contigs is 3.28814.
+Consider increasing the coverage threshold parameter, c, to 3.28814.
+n	n:200	L50	min	N80	N50	N20	E-size	max	sum	name
+1043	375	123	200	260	381	581	462	1678	137322	reads-6.fa
+ln -sf reads-6.fa reads-contigs.fa
