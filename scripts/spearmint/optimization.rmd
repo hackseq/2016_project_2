@@ -2,6 +2,9 @@
 title: Optimize genome sequence assembly parameters
 author: Shaun Jackman
 date: 2016-10-17
+output:
+  html_document:
+    keep_md: yes
 ---
 
 ```{r load-packages, message=FALSE}
