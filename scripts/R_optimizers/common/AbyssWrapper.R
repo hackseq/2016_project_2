@@ -8,7 +8,7 @@ s_default = 2 #Converts to 2 within functions
 #' @param k         size of a single k-mer in a k-mer pair (bp)
 #' @export
 runAbyss<-function(input, name, k, s=200) {
-    outdir = paste(name, "_abyss_k", k, "_s",s, sep="")
+    outdir = paste(name, "_abyss_k", k, "_s",s,"_l", l, sep="")
     dir.create(file.path(".", "runs"), showWarnings = FALSE)
     dir.create(file.path("runs", outdir), showWarnings = FALSE)
     outdir <- paste("runs/", outdir, sep="")
@@ -17,6 +17,7 @@ runAbyss<-function(input, name, k, s=200) {
                  " -C ", outdir,
                  " k=", k,
                  " s=", s,
+		 " l=", l,
                  " name=", name,
                  " in=\"", input, "\"",
                  sep = "")
@@ -83,12 +84,13 @@ stepadjust <- function(x){
 }
 ##Define shared functions for k, s inputs and N50, L50 output calls
 Abyss_n50 <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k", maximizer=-1){
-	#paramlist=c(k,s)
+	#paramlist=c(k,s,l)
 	#maximizer= -1 when optimization function is a minimization function
 	#maximizer=1 when optimization function is a maximization function
 	k = round(paramlist[1])
 	s = ifelse(length(paramlist)==1, s_default, round(paramlist[2]))
 	s = stepadjust(s)
+	l = ifelse(length(paramlist)<3, 25, round(paramlist[3]))
 	#Launch Abyss with input params
 	stats <- runAbyss(input=infile, name=outpref, k=k, s=s)
 	if (is.null(stats)){
@@ -106,8 +108,26 @@ Abyss_n50_l50 <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k",
         s = ifelse(length(paramlist)==1, s_default, round(paramlist[2]))
         #Launch Abyss with input params
 	s = stepadjust(s)
-	stats <- runAbyss(input=infile, name=outpref, k=k, s=s)
+	stats <- runAbyss(input=infile, name=outpref, k=k, s=s, l=l)
 	if (is.null(stats)){return(-1)}
 	#Need to fix this so name matching is for <whatever>-scaffolds.fa
 	return(c(stats[[which(stats$name=="200k-scaffolds.fa"), "N50"]]*maximizer, stats[[which(stats$name=="200k-scaffolds.fa"), "L50"]] * maximizer))
 }
+
+Abyss_n50_n <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k", maximizer=-1){
+        #paramlist=c(k,s)
+        #maximizer= -1 when optimization function is a minimization function
+        #maximizer=1 when optimization function is a maximization function
+        k = round(paramlist[1])
+        s = ifelse(length(paramlist)==1, s_default, round(paramlist[2]))
+	l = ifelse(length(paramlist)<3, 25, round(paramlist[3]))
+	
+        #Launch Abyss with input params
+        s = stepadjust(s)
+        stats <- runAbyss(input=infile, name=outpref, k=k, s=s, l=l)
+        if (is.null(stats)){return(-1)}
+        #Need to fix this so name matching is for <whatever>-scaffolds.fa
+        return(c(stats[[which(stats$name=="200k-scaffolds.fa"), "N50"]]*maximizer, stats[[which(stats$name=="200k-scaffolds.fa"), "n"]] * maximizer))
+}
+
+
