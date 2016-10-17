@@ -48,3 +48,14 @@ results/200k.fac.tsv: \
 	mlr --tsvlite cat $^ >$@
 	datamash -H max N50 <$@
 	head -n1 $@; grep $$(datamash -H max N50 <$@ | tail -n1) $@
+
+# Collect the optimization data.
+results/iterations.tsv: output/*.out
+	(printf "Iteration\tk\tl\tN50\n"; tail -qn1 $^ | sed -E 's/(k|l|N50)=//g' | awk '!x[$$0] {x[$$0] = 1; print}' | cat -n | tr -d ' ') >$@
+
+# Render an RMarkdown report to HTML.
+results/%.html: %.rmd
+	Rscript -e 'rmarkdown::render("$<", output_file = "$@")'
+
+# Dependencies
+results/optimization.html: results/iterations.tsv
