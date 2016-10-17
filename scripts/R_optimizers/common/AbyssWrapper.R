@@ -8,7 +8,7 @@ library("testthat")
 #' @param k         size of a single k-mer in a k-mer pair (bp)
 #' @export
 runAbyss<-function(input, name, k, s=1000) {
-    outdir = paste(name, "_abyss_k", k, sep="")
+    outdir = paste(name, "_abyss_k", k, "_s",s, sep="")
     dir.create(file.path(".", "runs"), showWarnings = FALSE)
     dir.create(file.path("runs", outdir), showWarnings = FALSE)
     outdir <- paste("runs/", outdir, sep="")
