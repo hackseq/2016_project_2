@@ -1,0 +1,64 @@
+---
+title: "mco_optimizer"
+author: "Jasleen Grewal"
+date: '2016-10-16'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Genetic Algorithms
+This is an R package that uses genetic algorithms for multi-objective, multi-parameter optimzation <https://cran.r-project.org/web/packages/mco/index.html>.
+
+```{r loadlibs, echo=FALSE}
+library("mco")
+```
+
+##Source data reading functions 
+Let us load the fits of the various optimization functions
+```{r pressure, echo=FALSE}
+#TO DO: have a function here that wgets the data file and points infile var to downloaded file
+#setwd("/Users/jgrewal/mygits/2016_project_2/")
+print(getwd())
+opt_funs <- list.files(paste(getwd(), "scripts/R_optimizers/mco/interm_objs/", sep="/"), full.names=TRUE, pattern="obj")
+```
+
+##Get test parameter ranges
+```{r params, echo=TRUE}
+library("rjson")
+json_file <- paste(getwd(), "scripts/R_optimizers/common/config.json", sep="/")
+json_data <- fromJSON(paste(readLines(json_file), collapse=""))
+params = json_data$variables
+#By default, if there is an integer ranged parameter, we will initialize the genetic algorithm population to half the size of the range of this parameter
+#If parameter is float, genetic algorithm population will be set by default to the range to the parameter
+getpoprange <- function(x){ifelse(x$type=="INT",(round((x$max-x$min)/2) - (round((x$max-x$min)/2) %% 4)), ((x$max-x$min) - ((x$max-x$min) %% 4)))}
+```
+
+Now let us visualize the optimization results 
+```{r plotga, echo=FALSE}
+plot(x=round(k_n50_fit$par),y=seq(1,dim(k_n50_fit$par)[1],1), xlab="K value", ylab="Population set", main="Parameter space at final iteration \n Optimization over \nObjective function N50", xlim=c(inparam$min,inparam$max))
+plot(x=round(k_n50_l50_fit$par),y=seq(1,dim(k_n50_l50_fit$par)[1],1), xlab="K value", ylab="Population set", main="Parameter space at final iteration \n Joint optimization over \nObjective functions N50 and L50", xlim=c(inparam$min, inparam$max))
+```
+
+Lastly, let us visualize the Pareto Frontier for N50 with L50
+```{r plotga, echo=FALSE}
+plot(k_n50_l50_fit, xlab="metric 1, N50", ylab="metric 2, L50")
+```
+
+###Response variable vs Input parameter plot
+```{r varplot, echo=FALSE}
+
+```
+
+##Visualize GA algorithm optimization (two param fit)
+We will be optimizing the parameters **k** and **s**, with single response variable N50 and jointly over N50 and L50
+```{r gafunctwoparam, results='hide', eval=FALSE}
+#TO DO : write this better so it automatically concatenates subfeatures per param  
+inparam1 = params$k
+inparam2 = params$s
+
+```
+
+
