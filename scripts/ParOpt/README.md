@@ -66,6 +66,31 @@ ubuntu@compute001:~/hackseq/ParOpt$ ./popt --grid max '../ParOpt/Abyss_wrapper.p
    30 f(4.400e+01, 6.000e+02) = 7672.0
    31 f(4.400e+01, 8.000e+02) = 7265.0
 Finished optimization after 32 evaluations.
-The optimal function value is 16454.0
+The optimal function value is 16454
 Optimal variables: 40 200
+```
+Performing a second round grid search to try and improve k = k_opt - 1 and s_step=s_step-100
+```
+ubuntu@compute001:~/hackseq/ParOpt$ ./popt --grid max '../ParOpt/Abyss_wrapper.py {0} {1}' 'fx = (.*)' 39,41,1 100,1000,100
+    0 f(3.900e+01, 1.000e+02) = 16452.0
+    1 f(3.900e+01, 2.000e+02) = 16452.0
+    2 f(3.900e+01, 3.000e+02) = 16452.0
+    3 f(3.900e+01, 4.000e+02) = 16452.0
+    4 f(3.900e+01, 5.000e+02) = 16452.0
+    5 f(3.900e+01, 6.000e+02) = 16452.0
+    6 f(3.900e+01, 7.000e+02) = 16452.0
+    7 f(3.900e+01, 8.000e+02) = 16452.0
+    8 f(3.900e+01, 9.000e+02) = 16452.0
+    9 f(4.000e+01, 1.000e+02) = 16454.0
+   10 f(4.000e+01, 2.000e+02) = 16454.0
+   11 f(4.000e+01, 3.000e+02) = 16454.0
+   12 f(4.000e+01, 4.000e+02) = 16454.0
+   13 f(4.000e+01, 5.000e+02) = 15458.0
+   14 f(4.000e+01, 6.000e+02) = 15458.0
+   15 f(4.000e+01, 7.000e+02) = 15458.0
+   16 f(4.000e+01, 8.000e+02) = 15458.0
+   17 f(4.000e+01, 9.000e+02) = 15458.0
+Finished optimization after 18 evaluations.
+The optimal function value is 16454
+Optimal variables: 40 100
 ```
