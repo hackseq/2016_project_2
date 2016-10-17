@@ -50,6 +50,16 @@ ggplot(dfm.melt, aes(l,k)) + geom_tile(aes(fill = N50), colour = "white")
 
 ![](Rplot.heatmap_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
+```r
+ggsave("heatmap.png")
+```
+
+```
+## Saving 7 x 5 in image
+```
+
+
+
 
 
 
