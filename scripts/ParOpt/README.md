@@ -30,6 +30,42 @@ user	9m6.533s
 sys	0m12.301s
 ```
 
-Next steps:
-- Skip the Nelder–Mead algorithm as is not good for this type of problem (integer based - non-convex).
-- For each value of k tested - output contiguity vs k and completeness metrics. Plot.
+Subsequently I have updated the wrapper to optimise two variables simultaneously: k, s.
+```
+ubuntu@compute001:~/hackseq/ParOpt$ ./popt --grid max '../ParOpt/Abyss_wrapper.py {0} {1}' 'fx = (.*)' 30,46,2 200,1000,200
+    0 f(3.000e+01, 2.000e+02) = 12281.0
+    1 f(3.000e+01, 4.000e+02) = 10589.0
+    2 f(3.000e+01, 6.000e+02) = 10589.0
+    3 f(3.000e+01, 8.000e+02) = 8333.0
+    4 f(3.200e+01, 2.000e+02) = 11404.0
+    5 f(3.200e+01, 4.000e+02) = 10244.0
+    6 f(3.200e+01, 6.000e+02) = 9891.0
+    7 f(3.200e+01, 8.000e+02) = 8532.0
+    8 f(3.400e+01, 2.000e+02) = 14620.0
+    9 f(3.400e+01, 4.000e+02) = 12503.0
+   10 f(3.400e+01, 6.000e+02) = 12470.0
+   11 f(3.400e+01, 8.000e+02) = 8789.0
+   12 f(3.600e+01, 2.000e+02) = 14620.0
+   13 f(3.600e+01, 4.000e+02) = 12496.0
+   14 f(3.600e+01, 6.000e+02) = 12496.0
+   15 f(3.600e+01, 8.000e+02) = 10589.0
+   16 f(3.800e+01, 2.000e+02) = 14619.0
+   17 f(3.800e+01, 4.000e+02) = 12246.0
+   18 f(3.800e+01, 6.000e+02) = 10958.0
+   19 f(3.800e+01, 8.000e+02) = 9156.0
+   20 f(4.000e+01, 2.000e+02) = 16454.0
+   21 f(4.000e+01, 4.000e+02) = 16454.0
+   22 f(4.000e+01, 6.000e+02) = 15458.0
+   23 f(4.000e+01, 8.000e+02) = 15458.0
+   24 f(4.200e+01, 2.000e+02) = 16451.0
+   25 f(4.200e+01, 4.000e+02) = 16451.0
+   26 f(4.200e+01, 6.000e+02) = 9222.0
+   27 f(4.200e+01, 8.000e+02) = 9222.0
+   28 f(4.400e+01, 2.000e+02) = 7900.0
+   29 f(4.400e+01, 4.000e+02) = 7672.0
+   30 f(4.400e+01, 6.000e+02) = 7672.0
+   31 f(4.400e+01, 8.000e+02) = 7265.0
+Finished optimization after 32 evaluations.
+The optimal function value is 16454.0
+Optimal variables: 40 200
+```
