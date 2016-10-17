@@ -1,15 +1,21 @@
 {
-    "language"        : "PYTHON",
-    "main-file"       : "abyss.py",
-    "experiment-name" : "abyss-200k",
-    "likelihood"      : "NOISELESS",
-    "variables" : {
-        "k" : {
-            "type" : "INT",
-            "size" : 1,
-            "min"  : 16,
-            "max"  : 50
-        }
+  "language" : "PYTHON",
+  "main-file" : "abyss.py",
+  "experiment-name" : "abyss-200k",
+  "likelihood" : "NOISELESS",
+  "max-finished-jobs": 1000,
+  "variables" : {
+    "k" : {
+      "type" : "INT",
+      "size" : 1,
+      "min" : 16,
+      "max" : 50
+    },
+    "l" : {
+      "type" : "INT",
+      "size" : 1,
+      "min" : 16,
+      "max" : 50
     }
+  }
 }
-

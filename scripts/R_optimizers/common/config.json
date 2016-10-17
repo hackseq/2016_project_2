@@ -1,0 +1,13 @@
+{
+    "language"        : "R",
+    "experiment-name" : "abyss-200k",
+    "variables" : {
+        "k" : {
+            "type" : "INT",
+            "size" : 1,
+            "min"  : 16,
+            "max"  : 45
+        }
+    }
+}
+

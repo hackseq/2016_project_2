@@ -1,0 +1,41 @@
+---
+title: Optimize genome sequence assembly parameters
+author: Shaun Jackman
+date: 2016-10-17
+output:
+  html_document:
+    keep_md: yes
+---
+
+```{r load-packages, message=FALSE}
+library(ggplot2)
+library(ggrepel)
+library(tidyverse)
+```
+
+# Read the data
+```{r read-data}
+data_orig <- read_tsv("results/iterations.tsv")
+data <- data_orig %>%
+	select(k, N50) %>%
+	distinct() %>%
+	mutate(Best_N50 = cummax(N50), Iteration = row_number())
+```
+
+# N50 vs k
+```{r plot-N50-vs-k}
+ggplot(data) +
+	aes(x = k, y = N50, label = Iteration) +
+	geom_point() +
+	geom_line() +
+	geom_text_repel()
+```
+
+# Best N50 vs Iteration
+```{r plot-N50-vs-iteration}
+ggplot(data) +
+	aes(x = Iteration, y = N50, label = k) +
+	geom_point() +
+	geom_text_repel() +
+	geom_line(aes(y = Best_N50))
+```

@@ -1,3 +1,6 @@
+*.fq
+*.fq.gz
+*.pyc
 data/test-data
-test-data.tar.gz
 runs
+test-data.tar.gz

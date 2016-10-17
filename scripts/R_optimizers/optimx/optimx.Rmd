@@ -1,0 +1,151 @@
+---
+title: "Optimizing abyss with optimx"
+author: "Hamid Younesy"
+date: "October 16, 2016"
+output: pdf_document
+---
+
+## Introduction
+
+**["optimx"](https://cran.r-project.org/web/packages/optimx/index.html)** is a 
+general-purpose optimization wrapper function that calls other R tools for
+optimization.
+
+### Usage
+```{r, eval=FALSE}
+optimx(par, # a vector of initial values for the parameters for which optimal values are to be found. 
+       fn,  # A function to be minimized, with first argument the vector of parameters
+       method=c("Nelder-Mead","BFGS"),  # list of the methods to be used (can be more than one)
+       lower=-Inf, upper=Inf, # Bounds on the variables
+       itnmax=NULL, # maximum number of iterations
+       control=list(),
+       ...)
+```
+
+Possible method codes are: 'Nelder-Mead', 'BFGS', 'CG', 'L-BFGS-B',
+'nlm', 'nlminb', 'spg', 'ucminf', 'newuoa', 'bobyqa', 'nmkb', 'hjkb', 'Rcgmin', or 'Rvmmin'.
+
+We have is a wrapper function testOptimx() around optimx to run optix for a given function and
+plot the results.
+
+```{r, echo=FALSE, eval=TRUE}
+library(optimx)
+library(ggplot2)
+
+testOptimx <- function(func, init_param, findMaximum=FALSE, 
+                       metricLim = NULL, p1Lim = NULL ) {
+    df_all <<- NULL
+    ans_all <<- NULL
+    for (mtd in c('Nelder-Mead' , 'BFGS', 'CG', 'L-BFGS-B'
+                  , 'nlm', 'nlminb', 'spg', 'ucminf', 'newuoa' 
+                  , 'bobyqa', 'nmkb', 'hjkb', 'Rcgmin', 'Rvmmin'
+                  )) {
+        results <<- NULL
+        ncall <<- 1
+        ans <- optimx(
+            fn = function(x) {
+                r <- func(x)
+                results <<- rbind(results, c(ncall, r, x))
+                ncall <<- ncall + 1
+                r
+                }
+            , method = mtd,
+            #, lower=-20, upper=20
+            , par = init_param
+            , itnmax = 30
+            , control=list(maximize=findMaximum, save.failures=TRUE, trace=0)
+            )
+        df_all <<- rbind(df_all, cbind(data.frame(results), mtd))
+        ans_all <<- rbind(ans_all, ans)
+    }
+
+    colnames(df_all) <<- c("n", "metric", paste("p",1:length(init_param), sep=""), "method")
+    
+    metric_stats = boxplot.stats(df_all$metric)$stats
+    p1_stats = boxplot.stats(df_all$p1)$stats
+
+    
+    
+    if (is.null(metricLim)) {
+        metricLim[1] <- metric_stats[1]
+        metricLim[2] <- metric_stats[5]
+    }
+    if (is.null(p1Lim)) {
+        p1Lim[1] <- p1_stats[1]
+        p1Lim[2] <- p1_stats[5]
+    }
+
+    p <- ggplot(df_all, aes(color=method)) +
+        theme_bw() +
+        geom_line(aes(x=n, y=metric)) +
+        coord_cartesian(ylim = c(metricLim[1], metricLim[2]))
+    print(p)
+
+    p <- ggplot(df_all, aes(color=method)) +
+        theme_bw() +
+        geom_line(aes(x=n, y=p1)) +
+        coord_cartesian(ylim = c(p1Lim[1], p1Lim[2]))
+    print(p)
+
+    barplot(ans_all$value
+            , names=rownames(ans_all)
+            , ylim=metricLim
+            , ylab = "best metric"
+            , las=2)
+}
+```
+
+## Testing with simple functions.
+
+First, let's test some simple functions of the form f(x, y) = f1(x) + f2(y).
+To mimick discrete parameters we will use round().
+
+### Two continious parameters
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+testOptimx(
+    func = function(x){abs(x[1]-5) + abs(x[2]-4)}
+    , init_param = c(0, 0)
+    , metricLim=c(0, 50), p1Lim=c(-20, 20)
+    )
+```
+
+### one discrete parameter
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+testOptimx(
+    func = function(x){abs(round(x[1])-4)}
+    , init_param = c(0, 0)
+    , metricLim=c(0, 50), p1Lim=c(-20, 20)
+    )
+```
+
+### One continious and one discrete parameter
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+testOptimx(
+    func = function(x){abs(x[1]-5) + abs(round(x[2])-4)}
+    , init_param = c(0, 0)
+    , metricLim=c(0, 50), p1Lim=c(-20, 20)
+    )
+```
+
+### Two discrete parameters
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+testOptimx(
+    func = function(x){abs(round(x[1])-5) + abs(round(x[2])-4)}
+    , init_param = c(0, 0)
+    , metricLim=c(0, 50), p1Lim=c(-20, 20)
+    )
+```
+
+## Testing with abyss 200k data
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+source(paste(getwd(), "scripts/R_optimizers/common/AbyssWrapper.R", sep="/"))
+testOptimx(
+    func = function(x){runAbyss200k(round(x[1]))}
+    , init_param = c(20, 0)
+    , findMaximum = TRUE 
+    , metricLim=c(0, 10000), p1Lim=c(0, 50)
+    )
+```
+
+
+
