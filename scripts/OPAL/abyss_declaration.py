@@ -1,7 +1,11 @@
-# Description of the foward finite-difference "algorithm".
+# Description of ABySS.
 from opal.core.algorithm import Algorithm
 from opal.core.parameter import Parameter
 from opal.core.measure   import Measure
+
+kd = int(raw_input("k-default: "))
+kl = int(raw_input("k-lower: "))
+ku = int(raw_input("k-upper: "))
 
 # Define Algorithm object.
 AB = Algorithm(name='AB', description='ABySS')
@@ -10,7 +14,8 @@ AB = Algorithm(name='AB', description='ABySS')
 AB.set_executable_command('python abyss_run.py')
 
 # Define parameter and register it with algorithm.
-k = Parameter(kind='integer', default=30, bound=(16, 48),
+#200k-test k = 30; 16, 48
+k = Parameter(kind='integer', default=kd, bound=(kl, ku),
               name='k', description='Step size')
 AB.add_param(k)
 

@@ -1,10 +1,15 @@
 from opal.core.io import *
-import sys
+
 import subprocess as sp
+
+import sys
 import csv
 import os
 import shlex
 import subprocess
+
+datasets = "200k.fq.gz"
+#datasets = raw_input("dataset(s): ")
 
 # Run ABySS
 def run(param_file, problem):
@@ -12,17 +17,12 @@ def run(param_file, problem):
     params = read_params_from_file(param_file)
     k = params['k']
 
-    #datasets = raw_input("dataset(s): ")
-    datasets = "200k.fq.gz"
-
     sp.call(["mkdir", "k%d" % k])
 
     #sp.call(["ln", "-s", "$PWD/%s" % datasets, "k%d/" % k])
-    sp.call("abyss-pe -C k%d name=hsapiens k=%d in=$PWD/200k.fq.gz" % (k, k), shell=True)
+    sp.call("abyss-pe -C k%d name=hsapiens k=%d in=$PWD/%s" % (k, k, datasets), shell=True)
     
-    #ape = 
-    #sp.call(["abyss-pe", "-C", "k%d" % k, "name=hsapiens", "k=%d" % k, "in=$PWD/200k.fq.gz"]) 
-    #% datasets]), stdout=sp.PIPE
+    #ape = sp.Popen(["abyss-pe", "-C", "k%d" % k, "name=hsapiens", "k=%d" % k, "in=$PWD/%s"]) % datasets]), stdout=sp.PIPE
     #log = sp.Popen(["tee", "abyss.log"], stdin=ape.stdout, stdout=sp.PIPE)
     #ape.stdout.close()
     #alog = log.communicate()[0]
