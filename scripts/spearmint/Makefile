@@ -51,7 +51,7 @@ results/200k.fac.tsv: \
 
 # Collect the optimization data.
 results/iterations.tsv: output/*.out
-	(printf "Iteration\tk\tl\tN50\n"; tail -qn1 $^ | sed -E 's/(k|l|N50)=//g' | awk '!x[$$0] {x[$$0] = 1; print}' | cat -n | tr -d ' ') >$@
+	(printf "Iteration\tk\tl\tN50\n"; tail -qn1 $^ | grep '^k=' | sed -E 's/(k|l|N50)=//g' | awk '!x[$$0] {x[$$0] = 1; print}' | cat -n | tr -d ' ') >$@
 
 # Render an RMarkdown report to HTML.
 results/%.html: %.rmd
