@@ -26,6 +26,15 @@ data_l <- data_orig %>%
 	mutate(Best_N50 = cummax(N50), Iteration = row_number())
 ```
 
+# Best N50 vs Iteration
+```{r plot-N50-k-vs-iteration}
+ggplot(data_k) +
+	aes(x = Iteration, y = N50, label = k) +
+	geom_point() +
+	geom_text_repel() +
+	geom_line(aes(y = Best_N50))
+```
+
 # N50 vs k
 ```{r plot-N50-vs-k}
 ggplot(data_k) +
@@ -42,13 +51,4 @@ ggplot(data_l) +
 	geom_point() +
 	geom_line() +
 	geom_text_repel()
-```
-
-# Best N50 vs Iteration
-```{r plot-N50-l-vs-iteration}
-ggplot(data_l) +
-	aes(x = Iteration, y = N50, label = l) +
-	geom_point() +
-	geom_text_repel() +
-	geom_line(aes(y = Best_N50))
 ```
