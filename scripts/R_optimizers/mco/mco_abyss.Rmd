@@ -13,9 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 This is an R package that uses genetic algorithms for multi-objective, multi-parameter optimzation <https://cran.r-project.org/web/packages/mco/index.html>.
 
 ```{r loadlibs, echo=FALSE}
-library("testthat")
 library("mco")
-library("readr")
 ```
 
 ##Source data reading functions 
@@ -33,7 +31,6 @@ library("rjson")
 json_file <- paste(getwd(), "scripts/R_optimizers/common/config.json", sep="/")
 json_data <- fromJSON(paste(readLines(json_file), collapse=""))
 params = json_data$variables
-multiparam = list(k, np)
 #By default, if there is an integer ranged parameter, we will initialize the genetic algorithm population to half the size of the range of this parameter
 #If parameter is float, genetic algorithm population will be set by default to the range to the parameter
 getpoprange <- function(x){ifelse(x$type=="INT",(round((x$max-x$min)/2) - (round((x$max-x$min)/2) %% 4)), ((x$max-x$min) - ((x$max-x$min) %% 4)))}

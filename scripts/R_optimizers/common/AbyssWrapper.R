@@ -78,8 +78,8 @@ runAbyss200k <- function(k) {
 ##Define shared functions for k, s inputs and N50, L50 output calls
 Abyss_n50 <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k"){
 	#paramlist=c(k,s)
-	k = paramlist[1]
-	s = felse(length(paramlist)==1, 1000, paramlist[2])
+	k = round(paramlist[1])
+	s = ifelse(length(paramlist)==1, 1000, round(paramlist[2]))
 	#Launch Abyss with input params
 	stats <- runAbyss(input=infile, name=outpref, k=k, s=s)
 	if (is.null(stats)){
@@ -91,8 +91,8 @@ Abyss_n50 <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k"){
 
 Abyss_n50_l50 <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k"){
 	#paramlist=c(k,s)
-        k = paramlist[1]
-        s = ifelse(length(paramlist)==1, 1000, paramlist[2])
+        k = round(paramlist[1])
+        s = ifelse(length(paramlist)==1, 1000, round(paramlist[2]))
         #Launch Abyss with input params
 	stats <- runAbyss(input=infile, name=outpref, k=k, s=s)
 	if (is.null(stats)){return(-1)}
