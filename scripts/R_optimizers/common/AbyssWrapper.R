@@ -1,5 +1,5 @@
 library("testthat")
-s_default = 200
+s_default = 2 #Converts to 2 within functions
 #' Runs Abyss
 #'
 #' Runs abyss with the specified parameters.
@@ -7,7 +7,7 @@ s_default = 200
 #' @param name      The name of this assembly
 #' @param k         size of a single k-mer in a k-mer pair (bp)
 #' @export
-runAbyss<-function(input, name, k, s=s_default) {
+runAbyss<-function(input, name, k, s=200) {
     outdir = paste(name, "_abyss_k", k, "_s",s, sep="")
     dir.create(file.path(".", "runs"), showWarnings = FALSE)
     dir.create(file.path("runs", outdir), showWarnings = FALSE)
@@ -79,7 +79,7 @@ runAbyss200k <- function(k) {
 ##Input s values of format m.nyz transforms into (100*m) + (10*n)
 ##Ex. s input 2.534 will convert to 250
 stepadjust <- function(x){
-	return(round(2.53,1)*100)	
+	return(round(x,1)*100)	
 }
 ##Define shared functions for k, s inputs and N50, L50 output calls
 Abyss_n50 <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k", maximizer=-1){
