@@ -18,4 +18,5 @@ model = Model(modelData=data, modelStructure=struct)
 #                    value='%3dBBE  %7.1eSOL  %8.3eOBJ  %5.2fTIME')
 NOMAD.solve(blackbox=model)
 
-#print 'Optimal value is approximately %21.15e' % 
+#print max(measures["N50"])
+#print 'Optimal value is approximately %21.15e' % float(get_max)
