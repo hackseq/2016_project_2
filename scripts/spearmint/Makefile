@@ -56,6 +56,7 @@ results/iterations.tsv: output/*.out
 # Render an RMarkdown report to HTML.
 results/%.html: %.rmd
 	Rscript -e 'rmarkdown::render("$<", output_file = "$@")'
+	sed -i .orig 's/^!\[](results\//![](/' results/$*.md
 
 # Dependencies
 results/optimization.html: results/iterations.tsv

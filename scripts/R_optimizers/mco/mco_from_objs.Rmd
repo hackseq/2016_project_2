@@ -2,7 +2,9 @@
 title: "mco_optimizer"
 author: "Jasleen Grewal"
 date: '2016-10-16'
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -46,7 +48,9 @@ Let us load the fits of the various optimization functions
 workdir="/Users/jgrewal/mygits/2016_project_2/"
 print(getwd())
 opt_funs <- list.files(paste(workdir, "scripts/R_optimizers/mco/interm_objs/", sep="/"), full.names=TRUE, pattern="obj")
-load(opt_funs[1])
+for(inobj in opt_funs){
+  load(inobj)
+}
 ```
 
 ####Get test parameter ranges
@@ -66,22 +70,47 @@ inparam3=params$l
 
 Now let us visualize the optimization results (multi input, multi metric)
 ```{r plotall, echo=FALSE}
-plot(x=round(k_n50_fit$par),y=seq(1,dim(k_n50_fit$par)[1],1), xlab="K value", ylab="Population individual", main="Parameter space at final iteration \n Optimization over \nObjective function N50", xlim=c(inparam$min,inparam$max))
+library(ggplot2); library(ggrepel)
+##1 input 1 response
+plotdat = data.frame(k_fit=round(k_n50_fit$par))
+ggplot(plotdat, aes(x=k_fit, fill=k_fit)) + geom_bar() + theme_bw() + xlim(c(inparam$min,inparam$max)) + xlab("Range of Parameter k") + ylab("Number of converging solutions") + ggtitle("Optimal Parameter K, fit for N50")
 
-plot(x=round(k_n50_fit$par),y=(-1* k_n50_fit$value[,1]), xlab="K value", ylab="Optimal N50", main="Convergent solution space \n Optimization over \nObjective function N50", xlim=c(inparam$min,inparam$max))
+plotdat = data.frame(k_fit=round(k_n50_fit$par), n50=(-1* k_n50_fit$value[,1]))
+ggplot(unique(plotdat), aes(x=k_fit, y=n50, label=k_fit)) + geom_point(size = 3) + theme_bw() + xlim(c(inparam$min,inparam$max)) + xlab("Range of Parameter k") + ylab("Number of converging solutions") + ggtitle("Convergent solution space \nOptimal Parameter K, fit for N50") + geom_text_repel(size=8)
 
 ##1 input 2 responses
-#plotdat=data.frame(k=k_n50_l50_fit$par[,1], n50=k_n50_l50_fit$value[,1], l50=k_n50_l50_fit$value[,2], model="k_n50_l50")
+plotdat=data.frame(k_fit=round(k_n50_l50_fit$par[,1]), n50=round(-1 * k_n50_l50_fit$value[,1]), l50=round(k_n50_l50_fit$value[,2]), model="k_n50_l50")
 
-#plot(x=round(k_n50_l50_fit$par),y=seq(1,dim(k_n50_l50_fit$par)[1],1), xlab="K value", ylab="Population individual", main="Parameter space at final iteration \n Joint optimization over \nObjective functions N50 and L50", xlim=c(inparam$min, inparam$max))
+ggplot(unique(plotdat), aes(x=n50, y=l50, label=k_fit)) + geom_tile() + theme_bw() + geom_text_repel(size=7) + xlab("Optimal N50") + ylab("Optimal L50") + ggtitle("Convergent solution space \nOptimal Parameter K, fit for N50 and L50")
 
-plot(x=round(k_n50_fit$par),y=(-1* k_n50_fit$value[,1]), xlab="K value", ylab="Optimal N50", main="Convergent solution space \n Optimization over \nObjective function N50", xlim=c(inparam$min,inparam$max))
+##2 input 1 response
+plotdat = data.frame(k_fit=round(ks_n50_fit$par[,1]),n50=-1*ks_n50_fit$value[,1], s_fit=round(ks_n50_fit$par[,2],1)*100)
+ggplot(unique(plotdat), aes(x=k_fit, y=s_fit, label=n50)) + geom_text_repel() + geom_point(size=2) + theme_bw() + xlim(c(inparam$min,inparam$max))+ ylim(c(100*inparam2$min,100*inparam2$max)) + xlab("Range of Parameter k") + ylab("Range of Parameter s") + ggtitle("Optimal Parameters k and s \n Optimized for N50 (optimal N50 labelled)")
+
+##2 input 2 responses
+plotdat = data.frame(k_fit=round(ks_n50_l50_fit$par[,1]),n50=-1*ks_n50_l50_fit$value[,1], s_fit=round(ks_n50_l50_fit$par[,2],1)*100, l50=ks_n50_l50_fit$value[,2])
+ggplot(unique(plotdat), aes(x=k_fit, y=s_fit, label=paste(n50,l50,sep=","))) + geom_text_repel() + geom_point(size=2) + theme_bw() + xlim(c(inparam$min,inparam$max))+ ylim(c(100*inparam2$min,100*inparam2$max)) + xlab("Range of Parameter k") + ylab("Range of Parameter s") + ggtitle("Optimal Parameters k and s \n Optimized for N50 and L50  together (N50, L50)")
+
+
+ggplot(unique(plotdat), aes(x=n50, y=l50, label=paste(k_fit,s_fit, sep=","))) + geom_point() + theme_bw() + geom_text_repel(size=7) + xlab("Optimal N50") + ylab("Optimal L50") + ggtitle("Convergent solution space \nOptimal Parameters (k,s), fit for N50 and L50")
 ```
 
 ####Pareto Frontier Plots for various input metrics
 Lastly, let us visualize the Pareto Frontier for N50 with L50
 ```{r plotpareto, echo=FALSE}
-#plot(k_n50_l50_fit, xlab="metric 1, N50", ylab="metric 2, L50")
+plot(-1*paretoFront(k_n50_fit), ylab="metric 1, N50", xlab="Population wide fit",main="Pareto Front for optimizing N50, \nchanging k")
+plot(x=-1*paretoFront(k_n50_l50_fit)[,1], y=paretoFront(k_n50_l50_fit)[,2], xlab="metric 1, N50", ylab="metric 2, L50",main="Pareto Front for optimizing N50 and L50 together, \nchanging k")
+plot(-1*paretoFront(ks_n50_fit), ylab="metric 1, N50", xlab="Population wide fit",main="Pareto Front for optimizing N50, \nchanging k and s")
+plot(x=-1*paretoFront(ks_n50_l50_fit)[,1], y=paretoFront(ks_n50_l50_fit)[,2], xlab="metric 1, N50", ylab="metric 2, L50",main="Pareto Front for optimizing N50 and L50 together, \nchanging k and s")
+k_n50_best = unique(-1*paretoFront(k_n50_fit))
+ks_n50_best = unique(-1*paretoFront(ks_n50_fit))
+k_l50_best = unique(-1*paretoFront(k_n50_l50_fit)[,1])
+ks_l50_best = unique(-1*paretoFront(ks_n50_l50_fit)[,1])
+sumdat = data.frame(optimization=c("Tweak k","Tweak k","Tweak k and s","Tweak k and s"),multimetric=c("N50","N50 and L50","N50","N50 and L50"),n50=c(k_n50_best,ks_n50_best,k_l50_best,ks_l50_best))
+sumdat$optimization = factor(sumdat$optimization, levels=c("Tweak k","Tweak k and s"))
+
+
+ggplot(sumdat, aes(x=optimization, y=n50, fill=multimetric)) + geom_bar(stat="identity", position="dodge") + theme_bw(base_size=16) + theme(axis.text.x=element_text(angle=45, hjust=1)) + ggtitle("Metric fit comparisons from Genetic Algorithm based optimization")
 ```
 
 ####Response variable vs Input parameter plot

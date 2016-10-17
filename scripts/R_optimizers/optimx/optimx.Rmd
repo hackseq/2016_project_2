@@ -2,7 +2,9 @@
 title: "Optimizing abyss with optimx"
 author: "Hamid Younesy"
 date: "October 16, 2016"
-output: pdf_document
+output:
+  html_document:
+    keep_md: yes
 ---
 
 ## Introduction
@@ -28,15 +30,60 @@ Possible method codes are: 'Nelder-Mead', 'BFGS', 'CG', 'L-BFGS-B',
 We have is a wrapper function testOptimx() around optimx to run optix for a given function and
 plot the results.
 
-```{r, echo=FALSE, eval=TRUE}
+```{r, echo=FALSE, eval=TRUE, results='hide'}
 library(optimx)
 library(ggplot2)
 
-testOptimx <- function(func, init_param, findMaximum=FALSE, 
-                       metricLim = NULL, p1Lim = NULL ) {
-    df_all <<- NULL
-    ans_all <<- NULL
-    for (mtd in c('Nelder-Mead' , 'BFGS', 'CG', 'L-BFGS-B'
+# Multiple plot function
+#
+# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
+# - cols:   Number of columns in layout
+# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
+#
+# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
+# then plot 1 will go in the upper left, 2 will go in the upper right, and
+# 3 will go all the way across the bottom.
+#
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+  library(grid)
+
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), plotlist)
+
+  numPlots = length(plots)
+
+  # If layout is NULL, then use 'cols' to determine layout
+  if (is.null(layout)) {
+    # Make the panel
+    # ncol: Number of columns of plots
+    # nrow: Number of rows needed, calculated from # of cols
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                    ncol = cols, nrow = ceiling(numPlots/cols))
+  }
+
+ if (numPlots==1) {
+    print(plots[[1]])
+
+  } else {
+    # Set up the page
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+      # Get the i,j matrix positions of the regions that contain this subplot
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
+}
+
+testOptimx <- function(func, init_param, findMaximum=FALSE) {
+    df_all <- NULL
+    ans_all <- NULL
+    for (mtd in c('Nelder-Mead', 'BFGS', 'CG', 'L-BFGS-B'
                   , 'nlm', 'nlminb', 'spg', 'ucminf', 'newuoa' 
                   , 'bobyqa', 'nmkb', 'hjkb', 'Rcgmin', 'Rvmmin'
                   )) {
@@ -55,17 +102,24 @@ testOptimx <- function(func, init_param, findMaximum=FALSE,
             , itnmax = 30
             , control=list(maximize=findMaximum, save.failures=TRUE, trace=0)
             )
-        df_all <<- rbind(df_all, cbind(data.frame(results), mtd))
-        ans_all <<- rbind(ans_all, ans)
+        df_all <- rbind(df_all, cbind(data.frame(results), mtd))
+        ans_all <- rbind(ans_all, ans)
     }
 
-    colnames(df_all) <<- c("n", "metric", paste("p",1:length(init_param), sep=""), "method")
-    
+    colnames(df_all) <- c("n", "metric", paste("p",1:length(init_param), sep=""), "method")
+    ans_all["method"] <- rownames(ans_all)
+
+    return (list(df_all = df_all, ans_all = ans_all))
+}
+
+plotOptimx <- function(optimxResults, 
+                       metricLim = NULL, p1Lim = NULL,
+                       metricLabel="metric", p1Label="p1") {
+    df_all <- optimxResults$df_all
+    ans_all <- optimxResults$ans_all
     metric_stats = boxplot.stats(df_all$metric)$stats
     p1_stats = boxplot.stats(df_all$p1)$stats
 
-    
-    
     if (is.null(metricLim)) {
         metricLim[1] <- metric_stats[1]
         metricLim[2] <- metric_stats[5]
@@ -75,75 +129,110 @@ testOptimx <- function(func, init_param, findMaximum=FALSE,
         p1Lim[2] <- p1_stats[5]
     }
 
-    p <- ggplot(df_all, aes(color=method)) +
-        theme_bw() +
-        geom_line(aes(x=n, y=metric)) +
-        coord_cartesian(ylim = c(metricLim[1], metricLim[2]))
-    print(p)
-
-    p <- ggplot(df_all, aes(color=method)) +
+    p1 <- ggplot(df_all, aes(color=method)) +
         theme_bw() +
         geom_line(aes(x=n, y=p1)) +
-        coord_cartesian(ylim = c(p1Lim[1], p1Lim[2]))
-    print(p)
+        ylim(p1Lim[1], p1Lim[2]) +
+        xlab("call index") +
+        ylab(p1Label) +
+        theme(legend.key.size = unit(0.5, "lines"), legend.text = element_text(size = rel(0.5)))
 
-    barplot(ans_all$value
-            , names=rownames(ans_all)
-            , ylim=metricLim
-            , ylab = "best metric"
-            , las=2)
+    #print(p)
+
+    
+    p2 <- ggplot(df_all, aes(color=method)) +
+        theme_bw() +
+        geom_line(aes(x=n, y=metric)) +
+        ylim(metricLim[1], metricLim[2]) +
+        xlab("call index") +
+        ylab(metricLabel) +
+        theme(legend.key.size = unit(0.5, "lines"), legend.text = element_text(size = rel(0.5)))
+    #print(p)
+
+    p3 <- ggplot(ans_all, aes(x=method, y=value)) +
+        theme_bw() + 
+        theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+        geom_segment(aes(xend = method, yend = 0), size = 10) +
+        ylim(metricLim[1], metricLim[2]) +
+        xlab("method") +
+        ylab(paste("best", metricLabel))
+    #print(p)
+    
+    #multiplot(p1, p2, p3, cols=1)
+    print(p1)
+    print(p2)
+    print(p3)
 }
 ```
 
 ## Testing with simple functions.
 
 First, let's test some simple functions of the form f(x, y) = f1(x) + f2(y).
-To mimick discrete parameters we will use round().
+These will all be minimization and the optimum metric is 0.
+To mimick discrete parameters we have currently opted for rounding things so that fir an int x, the optimizer queries between (x-. 5,x+.5] get passed as x to the function. since k parameter in abyss is still always int. 
+Interestingly convergence did not happen for most algorithms in optimx's package if we were floor'ing parameters
 
-### Two continious parameters
-```{r, echo=TRUE, warning=FALSE, message=FALSE}
-testOptimx(
+### Two continious parameters: f(x1, x2) = abs(x1 - 5) + abs(x2 - 4)
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+optimxResult <- testOptimx(
     func = function(x){abs(x[1]-5) + abs(x[2]-4)}
     , init_param = c(0, 0)
+    )
+
+plotOptimx(optimxResult
     , metricLim=c(0, 50), p1Lim=c(-20, 20)
+    , metricLabel="f(x1,x2)", p1Label="x1"
     )
 ```
 
-### one discrete parameter
-```{r, echo=TRUE, warning=FALSE, message=FALSE}
-testOptimx(
-    func = function(x){abs(round(x[1])-4)}
-    , init_param = c(0, 0)
-    , metricLim=c(0, 50), p1Lim=c(-20, 20)
-    )
-```
+### One continious and one discrete parameter: f(x1, x2) = abs(x1 - 5) + abs(round(x2)-4)
 
-### One continious and one discrete parameter
-```{r, echo=TRUE, warning=FALSE, message=FALSE}
-testOptimx(
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+optimxResult <- testOptimx(
     func = function(x){abs(x[1]-5) + abs(round(x[2])-4)}
     , init_param = c(0, 0)
+    )
+
+plotOptimx(optimxResult
     , metricLim=c(0, 50), p1Lim=c(-20, 20)
+    , metricLabel="f(x1,x2)", p1Label="x1"
     )
 ```
 
-### Two discrete parameters
-```{r, echo=TRUE, warning=FALSE, message=FALSE}
-testOptimx(
+### Two discrete parameters: f(x1, x2) = abs(round(x1)-5) + abs(round(x2)-4)
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+optimxResult <- testOptimx(
     func = function(x){abs(round(x[1])-5) + abs(round(x[2])-4)}
     , init_param = c(0, 0)
+    )
+
+plotOptimx(optimxResult
     , metricLim=c(0, 50), p1Lim=c(-20, 20)
+    , metricLabel="f(x1,x2)", p1Label="x1"
     )
 ```
 
-## Testing with abyss 200k data
-```{r, echo=TRUE, warning=FALSE, message=FALSE}
+## Testing with abyss
+Data: hsapien chr3, 500k reads
+
+Varying paramter: k
+
+Fixed parameters: s = 200, l = 25
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, results='hide'}
+setwd("/Users/hyounesy/SFU/Hackseq2016/2016_project_2")
 source(paste(getwd(), "scripts/R_optimizers/common/AbyssWrapper.R", sep="/"))
-testOptimx(
-    func = function(x){runAbyss200k(round(x[1]))}
+optimxResult <- testOptimx(
+    func = function(x){runAbyss500k(round(x[1]))}
     , init_param = c(20, 0)
     , findMaximum = TRUE 
-    , metricLim=c(0, 10000), p1Lim=c(0, 50)
+    )
+
+plotOptimx(optimxResult
+    , metricLim=c(0, 30000), p1Lim=c(0, 50)
+    , metricLabel="N50", p1Label="k"
     )
 ```
 
