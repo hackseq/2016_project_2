@@ -15,8 +15,11 @@ library(tidyverse)
 
 # Read the data
 ```{r read-data}
-data <- read_tsv("results/iterations.tsv") %>%
-	mutate(Best_N50 = cummax(N50))
+data_orig <- read_tsv("results/iterations.tsv")
+data <- data_orig %>%
+	select(k, N50) %>%
+	distinct() %>%
+	mutate(Best_N50 = cummax(N50), Iteration = row_number())
 ```
 
 # N50 vs k
