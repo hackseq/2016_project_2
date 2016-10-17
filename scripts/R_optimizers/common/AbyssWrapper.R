@@ -7,8 +7,8 @@ s_default = 2 #Converts to 2 within functions
 #' @param name      The name of this assembly
 #' @param k         size of a single k-mer in a k-mer pair (bp)
 #' @export
-runAbyss<-function(input, name, k, s=200) {
-    outdir = paste(name, "_abyss_k", k, "_s",s,"_l", l, sep="")
+runAbyss<-function(input, name, k, s=200, l=25) {
+    outdir = paste(name, "_abyss_k", k, "_s",s, "_l", l, sep="")
     dir.create(file.path(".", "runs"), showWarnings = FALSE)
     dir.create(file.path("runs", outdir), showWarnings = FALSE)
     outdir <- paste("runs/", outdir, sep="")
@@ -92,7 +92,7 @@ Abyss_n50 <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k", max
 	s = stepadjust(s)
 	l = ifelse(length(paramlist)<3, 25, round(paramlist[3]))
 	#Launch Abyss with input params
-	stats <- runAbyss(input=infile, name=outpref, k=k, s=s)
+	stats <- runAbyss(input=infile, name=outpref, k=k, s=s, l=l)
 	if (is.null(stats)){
 		return(-1)
 	}
@@ -106,6 +106,7 @@ Abyss_n50_l50 <- function(paramlist, infile="$PWD/data/200k.fq", outpref="200k",
 	#maximizer=1 when optimization function is a maximization function
         k = round(paramlist[1])
         s = ifelse(length(paramlist)==1, s_default, round(paramlist[2]))
+	l = ifelse(length(paramlist)<3, 25, round(paramlist[3]))
         #Launch Abyss with input params
 	s = stepadjust(s)
 	stats <- runAbyss(input=infile, name=outpref, k=k, s=s, l=l)
