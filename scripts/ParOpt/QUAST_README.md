@@ -6,6 +6,7 @@ For each optimization, run QUAST with the reference genome to collect assembly q
 Output is as follows:
 quast_output.tar
 - k_s_l_n/
+
 Where the folder name represents different parameter values:
 
 report.txt in each folder gives useful information, N50, number of missasemblies, total number of bases covered in reference, largest contig assembled, GC content etc.
