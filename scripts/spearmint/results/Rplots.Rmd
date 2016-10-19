@@ -1,0 +1,51 @@
+---
+title: "Hackseq.Rplots"
+author: "Veera"
+date: "17 October 2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# 3-Dimensional plots 
+
+```{r}
+#load the file 
+dfm = read.table("iterations.tsv", sep = "\t", header = TRUE)
+
+#load the libraries
+library(scatterplot3d)
+
+#create a data frame only with the 3 columns to be plotted
+bar.dfm <- dfm[,c("k","l","N50")]
+
+#define the plot 
+s3d <- scatterplot3d(bar.dfm, type = "h", color = grey(nrow(bar.dfm):1/40), 
+                     angle = 55, scale.y = 1,pch = 16)
+
+#add linear model
+my.lm <- lm(bar.dfm$N50 ~ bar.dfm$k + bar.dfm$l)
+
+#plot the linear model
+s3d$plane3d(my.lm)
+```
+library(ggplot2)
+library(reshape2)
+
+dfm.mat = acast(dfm, k ~ l, value.var = "N50")
+
+dfm.mat[ is.na(dfm.mat)] = 0
+
+dfm.melt = melt(dfm.mat)
+dfm.melt$Var1 = as.factor(dfm.melt$Var1)
+dfm.melt$Var2 = as.factor(dfm.melt$Var2)
+dfm.melt.m = ddply(dfm.melt, .(Var2), transform, rescale = rescale(value))
+
+ggplot(dfm.melt.m, aes(Var2,Var1)) + geom_tile(aes(fill = value), colour = "white")
+
+
+dfm.data.matrix = data.matrix(dfm.mat)
+dfm_heatmap = heatmap(dfm.data.matrix, Rowv=NA, Colv=NA, col = cm.colors(256), margins=c(5,10))

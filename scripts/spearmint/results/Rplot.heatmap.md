@@ -38,6 +38,7 @@ names(dfm.melt) = c("k","l","N50")
 
 dfm.melt$k = as.factor(dfm.melt$k)
 dfm.melt$l = as.factor(dfm.melt$l)
+dfm.melt = merge(dfm.melt,dfm, by = c("k","l","N50"), all.x= TRUE)
 ```
 
 
@@ -45,7 +46,11 @@ dfm.melt$l = as.factor(dfm.melt$l)
 
 
 ```r
-ggplot(dfm.melt, aes(l,k)) + geom_tile(aes(fill = N50), colour = "white")
+ggplot(dfm.melt, aes(l,k)) + geom_tile(aes(fill = N50), colour = "white") + geom_text(aes(label = Iteration))
+```
+
+```
+## Warning: Removed 284 rows containing missing values (geom_text).
 ```
 
 ![](Rplot.heatmap_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
@@ -56,6 +61,10 @@ ggsave("heatmap.png")
 
 ```
 ## Saving 7 x 5 in image
+```
+
+```
+## Warning: Removed 284 rows containing missing values (geom_text).
 ```
 
 

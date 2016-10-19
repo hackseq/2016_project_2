@@ -43,13 +43,15 @@ names(dfm.melt) = c("k","l","N50")
 
 dfm.melt$k = as.factor(dfm.melt$k)
 dfm.melt$l = as.factor(dfm.melt$l)
+dfm.melt = merge(dfm.melt,dfm, by = c("k","l","N50"), all.x= TRUE)
+
 ```
 
 
 # plot the heatmap
 
 ```{r }
-ggplot(dfm.melt, aes(l,k)) + geom_tile(aes(fill = N50), colour = "white")
+ggplot(dfm.melt, aes(l,k)) + geom_tile(aes(fill = N50), colour = "white") + geom_text(aes(label = Iteration))
 ggsave("heatmap.png")
 ```
 
